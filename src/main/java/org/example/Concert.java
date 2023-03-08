@@ -21,9 +21,18 @@ public class Concert {
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
     private List<Wc> wcs;
-//    @ManyToMany
-//    @JoinTable(name = "wc", joinColumns = {@JoinColumn(name = "concert_id")}, inverseJoinColumns = {@JoinColumn(name = "customer_id")})
-//    private List<Customer> customers;
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "wc", joinColumns = {@JoinColumn(name = "concert_id")}, inverseJoinColumns = {@JoinColumn(name = "customer_id")})
+    private List<Customer> customers;
     public Concert(){
 
     }
