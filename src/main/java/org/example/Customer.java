@@ -23,9 +23,9 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Wc> wcs;
 
-//    @ManyToMany
-//    @JoinTable(name = "wc",joinColumns = {@JoinColumn(name = "customer_id")}, inverseJoinColumns = {@JoinColumn(name = "concert_id")})
-//    private List<Concert> concerts;
+    @ManyToMany
+    @JoinTable(name = "wc",joinColumns = {@JoinColumn(name = "customer_id")}, inverseJoinColumns = {@JoinColumn(name = "concert_id")})
+    private List<Concert> concerts;
     public Customer(){
 
     }

@@ -79,6 +79,7 @@ public class Main {
 
         Concert concert = session.get(Concert.class,1);
         System.out.println(concert.getWcs());
+        System.out.println(concert.getCustomers());
 
         //Gör commit och stänger sessionen
         session.getTransaction().commit();
