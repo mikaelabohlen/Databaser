@@ -1,8 +1,15 @@
 package org.example;
 
+import org.example.entities.Address;
+import org.example.entities.Arena;
+import org.example.entities.Concert;
+import org.example.entities.Customer;
+import org.example.enums.Setting;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MockManager {
 
@@ -12,7 +19,6 @@ public class MockManager {
         address.setHouseNumber(4);
         address.setCity("Kvissleby");
         address.setZipCode(86234);
-
         session.persist(address);
     }
 
@@ -58,5 +64,25 @@ public class MockManager {
         concert2.setAgeLimit(3);
         concert2.setArena(session.get(Arena.class, 1));
         session.persist(concert2);
+    }
+
+    public void createMockLinks(Session session){
+        //Denna bör göras klart först när DAON är klar?.
+
+        //Mocklink customer1 consert ALL(hittills)=
+        Customer customer1 = session.get(Customer.class, 1);
+        List<Concert> concerts1 = new ArrayList<>();
+        concerts1.add(session.get(Concert.class, 2));
+        concerts1.add(session.get(Concert.class, 1));
+        customer1.setConcerts(concerts1);
+
+        session.update(customer1);
+
+        //Mocklink customer2 Concert 2
+        Customer customer2 = session.get(Customer.class, 2);
+        List<Concert> concerts2 = new ArrayList<>();
+        concerts2.add(session.get(Concert.class, 2));
+        customer2.setConcerts(concerts2);
+        session.update(customer2);
     }
 }
