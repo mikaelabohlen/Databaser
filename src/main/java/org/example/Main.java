@@ -3,13 +3,37 @@ package org.example;
 
 
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+import org.example.gui.Gui;
+import org.example.gui.GuiController;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+//JAVA FX MAIN
+
+public class Main extends Application {
+    private Gui gui;
+    private GuiController controller;
+
+    @Override
+    public void start(Stage primaryStage) {
+        controller = new GuiController();
+        gui = new Gui(primaryStage, controller);
+        gui.setupGui();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+}
 
 
-public class Main {
+//VANLIGA MAIN
+
+/*public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
@@ -34,10 +58,6 @@ public class Main {
         session.getTransaction().commit();
         session.close();
 
-        System.out.println("HEJ JAG HETER JIM DETTA ÄR MIN COMMIT TILL DETTA PROGRAMMET");
-        System.out.println("HEJ JAG HETER JIM DETTA ÄR MIN COMMIT TILL DETTA PROGRAMMET");
 
     }
-
-
-}
+}*/
