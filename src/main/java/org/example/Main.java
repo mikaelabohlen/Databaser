@@ -18,11 +18,14 @@ public class Main {
         Controller controller = new Controller();
         controller.setSession(session);
 
-//        controller.createMockAddress();
-//        controller.createMockArenas();
-//        controller.createMockCustomers();
-//        controller.createMockConcerts();
-//        controller.createMockLinks();
+        MockManager mockManager = new MockManager();
+        controller.setMockManager(mockManager);
+
+        mockManager.createMockAddress(controller.getSession());
+        mockManager.createMockArenas(controller.getSession());
+        mockManager.createMockCustomers(controller.getSession());
+        mockManager.createMockConcerts(controller.getSession());
+        mockManager.createMockLinks(controller.getSession());
 
         controller.listConcertsForSpecificCustomer(1);
         controller.listConcertsForSpecificCustomer(2);

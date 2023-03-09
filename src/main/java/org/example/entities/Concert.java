@@ -1,9 +1,8 @@
-package org.example;
+package org.example.entities;
 
 import javax.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

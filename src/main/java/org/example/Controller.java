@@ -1,8 +1,9 @@
 package org.example;
 
+import org.example.entities.Concert;
+import org.example.entities.Customer;
 import org.hibernate.Session;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class Controller {
         return session;
     }
 
+    public MockManager getMockManager() {
+        return mockManager;
+    }
+
+    public void setMockManager(MockManager mockManager) {
+        this.mockManager = mockManager;
+    }
 
     public List<Concert> getConcertsFromDatabase() {
         return session.createQuery("FROM Concert", Concert.class).list();
@@ -40,20 +48,6 @@ public class Controller {
         for (Concert concert : customerRetrieved.getConcerts()) {
             System.out.println(concert.getArtist());
         }
-    }
-
-    public void createMockLinks(){
-        //Mocklink customer1 consert ALL
-        Customer customer1 = session.get(Customer.class, 1);
-        customer1.setConcerts(getConcertsFromDatabase());
-        session.update(customer1);
-
-        //Mocklink customer2 Concert 2
-        Customer customer2 = session.get(Customer.class, 2);
-        List<Concert> concerts = new ArrayList<>();
-        concerts.add(session.get(Concert.class, 2));
-        customer2.setConcerts(concerts);
-        session.update(customer2);
     }
 
     public void linkCustomersConcerts(Customer customer, List<Concert> concerts) { //buyTicket eller dylikt

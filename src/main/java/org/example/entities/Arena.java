@@ -1,4 +1,6 @@
-package org.example;
+package org.example.entities;
+
+import org.example.enums.Setting;
 
 import javax.persistence.*;
 
