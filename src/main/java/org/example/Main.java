@@ -31,8 +31,26 @@ public class Main extends Application {
 }
 
 
-//VANLIGA MAIN
 
+
+//MIKAELAS MAIN
+/*public class Main {
+    public static void main(String[] args) {
+
+
+
+
+
+
+    }
+}*/
+
+
+
+
+
+
+//CAROLINES MAIN
 /*public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -57,7 +75,5 @@ public class Main extends Application {
         //Gör commit och stänger sessionen
         session.getTransaction().commit();
         session.close();
-
-
     }
 }*/
