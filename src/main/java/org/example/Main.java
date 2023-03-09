@@ -35,6 +35,7 @@ public class Main {
         session.close();
 
         System.out.println("HEJ JAG HETER JIM DETTA ÄR MIN COMMIT TILL DETTA PROGRAMMET");
+        System.out.println("HEJ JAG HETER JIM DETTA ÄR MIN COMMIT TILL DETTA PROGRAMMET");
 
     }
 
