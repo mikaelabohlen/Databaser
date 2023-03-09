@@ -20,6 +20,6 @@
         <mapping class="org.example.Arena"/>
         <mapping class="org.example.Concert"/>
         <mapping class="org.example.Customer"/>
-        <mapping class="org.example.Wc"/>
+<!--        <mapping class="org.example.Wc"/>-->
     </session-factory>
 </hibernate-configuration>

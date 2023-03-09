@@ -19,28 +19,22 @@ public class Concert {
     @JoinColumn
     private Arena arena;
 
-    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
-    private List<Wc> wcs;
+//    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
+//    private List<Wc> wcs;
+    @ManyToMany(mappedBy = "concerts")
 
-    public List<Customer> getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
-    }
-
-    @ManyToMany
-    @JoinTable(name = "wc", joinColumns = {@JoinColumn(name = "concert_id")}, inverseJoinColumns = {@JoinColumn(name = "customer_id")})
+//    @JoinTable(name = "wc",
+//            joinColumns = {@JoinColumn(name = "concert_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "customer_id")})
     private List<Customer> customers;
     public Concert(){
 
     }
 
-    public Concert(List<Wc> wc) {
-        wc = new ArrayList<>();
-        this.wcs = wc;
-    }
+//    public Concert(List<Wc> wc) {
+//        wc = new ArrayList<>();
+//        this.wcs = wc;
+//    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -88,19 +82,19 @@ public class Concert {
     public void setArena(Arena arena) {
         this.arena = arena;
     }
-    public List<Wc> getWcs() {
-        return wcs;
-    }
-
-    public void setWcs(List<Wc> wc) {
-        this.wcs = wc;
-    }
-//    public List<Customer> getCustomers() {
-//        return customers;
+//    public List<Wc> getWcs() {
+//        return wcs;
 //    }
 //
-//    public void setCustomers(List<Customer> customers) {
-//        this.customers = customers;
+//    public void setWcs(List<Wc> wc) {
+//        this.wcs = wc;
 //    }
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
 
 }
