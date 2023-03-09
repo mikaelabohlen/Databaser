@@ -8,7 +8,7 @@
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost/wigells_concert</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">billytalent</property>
+        <property name="connection.password">root</property>
         <property name="connection.pool_size">3</property>
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>  <!--MySQL8Dialect-->
         <property name="current_session_context_class">thread</property>
