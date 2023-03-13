@@ -16,29 +16,20 @@ public class Customer {
     private Integer id;
     private String firstName;
     private String lastName;
-//    private Date birthdate;
     private LocalDate birthdate;
     private String phoneNumber;
+    private String password;
     @OneToOne
     @JoinColumn
     private Address adress;
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-//    private List<Wc> wcs;
-
     @ManyToMany
-//    @JoinTable(name = "wc",joinColumns = {@JoinColumn}, inverseJoinColumns = {@JoinColumn})
-    @JoinTable(name = "wc",
-            joinColumns = {@JoinColumn(name = "customer_id")},
+    @JoinTable(joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "concert_id")})
     private List<Concert> concerts;
+
     public Customer(){
 
     }
-//    public Customer(List<Wc> wc) {
-//        wc = new ArrayList<>();
-//        this.wcs = wc;
-//    }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -79,6 +70,14 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Address getAdress() {
         return adress;
     }
@@ -86,15 +85,6 @@ public class Customer {
     public void setAdress(Address adress) {
         this.adress = adress;
     }
-
-//    public List<Wc> getWcs() {
-//        return wcs;
-//    }
-//
-//    public void setWcs(List<Wc> wc) {
-//        this.wcs = wc;
-//    }
-
 
     public List<Concert> getConcerts() {
         return concerts;

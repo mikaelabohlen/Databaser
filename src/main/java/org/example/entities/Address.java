@@ -8,10 +8,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String streetName;
-    private Integer houseNumber; //borde denna vara string ifall man bor på 4A?
+    private Integer houseNumber;
     private Integer zipCode;
     private String city;
-
     public Address() {
 
     }
