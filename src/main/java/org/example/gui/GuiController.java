@@ -15,9 +15,14 @@ public class GuiController {
     private ArenaDTO arenaDTO, arenaDTO2, arenaDTO3, arenaDTO4, arenaDTO5;
 
     private List<ConcertDTO> concertDTOS;
+    private List<ArenaDTO> arenaDTOS;
 
     public List<ConcertDTO> getConcertDTOS() {
         return concertDTOS;
+    }
+
+    public List<ArenaDTO> getArenaDTOS() {
+        return arenaDTOS;
     }
 
     private List<UserDTO> userDTOS;
@@ -34,7 +39,6 @@ public class GuiController {
             if (userDTO.getUserName().equals(userName) && userDTO.getPassword().equals(password)) {
                 return true;
             }
-
         }
         return false;
     }
@@ -69,6 +73,13 @@ public class GuiController {
         concertDTOS.add(concertDTO4);
         concertDTOS.add(concertDTO5);
 
+        arenaDTOS = new ArrayList<>();
+        arenaDTOS.add(arenaDTO);
+        arenaDTOS.add(arenaDTO2);
+        arenaDTOS.add(arenaDTO3);
+        arenaDTOS.add(arenaDTO4);
+        arenaDTOS.add(arenaDTO5);
+
         userDTOS = new ArrayList<>();
         userDTOS.add(demoUserDTO);
         userDTOS.add(demoUser2DTO);
@@ -95,10 +106,10 @@ public class GuiController {
 
     private void createMockArenas() {
         arenaDTO = new ArenaDTO("Ullevi", adressDTO,true);
-        arenaDTO2 = new ArenaDTO("Globen", adressDTO,true);
-        arenaDTO3 = new ArenaDTO("Friends Arena", adressDTO,true);
-        arenaDTO4 = new ArenaDTO("Tele 2 Arena", adressDTO,true);
-        arenaDTO5 = new ArenaDTO("Hovet", adressDTO,true);
+        arenaDTO2 = new ArenaDTO("Globen", adressDTO2,true);
+        arenaDTO3 = new ArenaDTO("Friends Arena", adressDTO3,true);
+        arenaDTO4 = new ArenaDTO("Tele 2 Arena", adressDTO4,true);
+        arenaDTO5 = new ArenaDTO("Hovet", adressDTO5,true);
     }
 
     private void createMockConcerts() {
