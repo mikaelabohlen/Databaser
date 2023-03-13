@@ -6,11 +6,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.sql.Array;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Gui {
@@ -183,7 +185,7 @@ public class Gui {
 
         //ADMIN DELETE CONCERT VIEW
         private GridPane concertListAdmin;
-        private Button[]cancels;
+        private ArrayList<Button>cancels;
 
         public void setupCenter() {
 
@@ -283,6 +285,7 @@ public class Gui {
 
             concertArtistTextField = new TextField();
             concertDateTextField = new TextField();
+            concertDateTextField.setPromptText("yyyy-mm-dd");
             concertPriceTextField = new TextField();
             concertAgeLimitTextField = new TextField();
 
@@ -498,6 +501,7 @@ public class Gui {
         handleAddConcertSubmitButton();
         handleDeleteConcertButton();
 
+
         //REGISTER
         handleRegisterCancelButton();
         handleRegisterSubmitButton();
@@ -528,20 +532,102 @@ public class Gui {
             center.loggedinAdminViewVBox.getChildren().clear();
             center.loggedInAdminLabel.setText("Delete Concert");
             center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.concertListAdmin);
+
+            handleCancelButtons();
+        /*    clearConcertsAdmin();
+            listConcertsAdmin();*/
         });
 
     }
 
     private void handleAddArenaSubmitButton() {
         center.arenaSubmitButton.setOnMouseClicked(event-> {
-            //TODO
+            boolean arenaAdded;
+            List<String> addArenaInputs = new ArrayList<>();
+            addArenaInputs.add(center.arenaNameTextField.getText());
+            addArenaInputs.add(center.arenaAdressStreetTextField.getText());
+            addArenaInputs.add(center.arenaAdressHouseNumberTextField.getText());
+            addArenaInputs.add(center.arenaAdressZipCodeTextField.getText().replace(" ", ""));
+            addArenaInputs.add(center.arenaAdressCityTextField.getText());
+
+            arenaAdded = controller.addnewArena(addArenaInputs);
+
+            if(arenaAdded) {
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Arena added");
+                alert.setHeaderText("Arena: " + center.arenaNameTextField.getText());
+                alert.setContentText("Adress: " + center.arenaAdressStreetTextField.getText() + center.arenaAdressHouseNumberTextField.getText() + "\n" +
+                        "City: " + center.arenaAdressCityTextField.getText());
+                alert.showAndWait();
+                center.arenaNameTextField.clear();
+                center.arenaAdressStreetTextField.clear();
+                center.arenaAdressHouseNumberTextField.clear();
+                center.arenaAdressZipCodeTextField.clear();
+                center.arenaAdressCityTextField.clear();
+
+                addArenasToChoiceBox();
+            }
+
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Arena not added");
+                alert.setHeaderText("Something went wrong");
+                alert.showAndWait();
+            }
         });
     }
 
     private void handleAddConcertSubmitButton() {
         center.concertSubmitButton.setOnMouseClicked(event-> {
-            //TODO
+            boolean concertAdded;
+            List<String> addConcertInputs = new ArrayList<>();
+            addConcertInputs.add(center.concertArtistTextField.getText());
+            addConcertInputs.add(center.concertDateTextField.getText());
+            addConcertInputs.add(center.concertPriceTextField.getText());
+            addConcertInputs.add(center.concertAgeLimitTextField.getText());
+            addConcertInputs.add(center.arenasChoiceBox.getValue());
+
+            concertAdded = controller.addNewConcert(addConcertInputs);
+
+            if(concertAdded) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Concert added");
+                alert.setHeaderText("Artist: " + center.concertArtistTextField.getText());
+                alert.setContentText("Date: " + center.concertDateTextField.getText() + "\n" +
+                                     "Arena: " + center.arenasChoiceBox.getValue());
+                alert.showAndWait();
+
+                center.concertDateTextField.clear();
+                center.concertArtistTextField.clear();
+                center.concertPriceTextField.clear();
+                center.concertAgeLimitTextField.clear();
+            }
+
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Concert not added");
+                alert.setHeaderText("Something went wrong");
+                alert.showAndWait();
+            }
         });
+
+
+    }
+
+    private void handleCancelButtons() {
+        for (int i = 0; i <center.cancels.size(); i++) {
+            int concert = i;
+            center.cancels.get(i).setOnMouseClicked(event -> {
+                center.cancels.get(concert).setText("Canceled");
+                center.cancels.get(concert).setDisable(true);
+                center.cancels.remove(concert);
+                System.out.println(concert);
+                System.out.println(controller.getConcertDTOS().get(concert).getArtist());
+                controller.getConcertDTOS().remove(concert);
+                handleCancelButtons();
+            });
+        }
     }
 
     //REGISTER BUTTONS
@@ -707,7 +793,7 @@ public class Gui {
 
     private void listConcertsAdmin() {
         int numOfConcerts = controller.getConcertDTOS().size();
-        center.cancels = new Button[numOfConcerts];
+        center.cancels = new ArrayList();
         for(int i=0; i<numOfConcerts; i++) {
             Label artist = new Label();
             Label arena = new Label();
@@ -722,13 +808,14 @@ public class Gui {
             date.setText(String.valueOf(controller.getConcertDTOS().get(i).getDate()));
             price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));
 
-            center.concertListAdmin.add(artist, 0, i+1, 1, 1);
-            center.concertListAdmin.add(arena, 1, i+1, 1, 1);
-            center.concertListAdmin.add(ageLimit, 2, i+1, 1, 1);
-            center.concertListAdmin.add(date, 3, i+1, 1, 1);
-            center.concertListAdmin.add(price, 4,i+1,1,1);
-            center.concertListAdmin.add(cancel,5,i+1,1,1);
-            center.cancels[i]=cancel;
+            center.concertListAdmin.add(cancel,0,i+1,1,1);
+            center.concertListAdmin.add(artist, 1, i+1, 1, 1);
+            center.concertListAdmin.add(arena, 2, i+1, 1, 1);
+            center.concertListAdmin.add(ageLimit, 3, i+1, 1, 1);
+            center.concertListAdmin.add(date, 4, i+1, 1, 1);
+            center.concertListAdmin.add(price, 5,i+1,1,1);
+
+            center.cancels.add(cancel);
         }
     }
 
@@ -749,6 +836,9 @@ public class Gui {
     }
 
     private void addArenasToChoiceBox() {
+        if(center.arenas!=null){
+            center.arenas.clear();
+        }
         center.arenas = center.arenasChoiceBox.getItems();
         for(int i=0; i<controller.getArenaDTOS().size(); i++) {
             center.arenas.add(controller.getArenaDTOS().get(i).getName());

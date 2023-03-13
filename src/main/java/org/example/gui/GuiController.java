@@ -16,7 +16,7 @@ public class GuiController {
 
     private List<ConcertDTO> concertDTOS;
     private List<ArenaDTO> arenaDTOS;
-
+    private List<UserDTO> userDTOS;
     public List<ConcertDTO> getConcertDTOS() {
         return concertDTOS;
     }
@@ -24,8 +24,6 @@ public class GuiController {
     public List<ArenaDTO> getArenaDTOS() {
         return arenaDTOS;
     }
-
-    private List<UserDTO> userDTOS;
 
     public GuiController() {
         createMockData();
@@ -56,15 +54,57 @@ public class GuiController {
         return false;
     }
 
+    public boolean addNewConcert(List<String> addConcertInputs) {
+        try {
+            ConcertDTO concertDTOnew = new ConcertDTO();
+
+            concertDTOnew.setArtist(addConcertInputs.get(0));
+            concertDTOnew.setDate(LocalDate.parse(addConcertInputs.get(1)));
+            concertDTOnew.setPrice(Double.parseDouble(addConcertInputs.get(2)));
+            concertDTOnew.setAgeLimit(Integer.parseInt(addConcertInputs.get(3)));
+
+            for(int i=0; i<getArenaDTOS().size(); i++) {
+                if(getArenaDTOS().get(i).getName().equals(addConcertInputs.get(4))) {
+                    concertDTOnew.setArena(getArenaDTOS().get(i));
+                }
+            }
+            getConcertDTOS().add(concertDTOnew);
+            return true;
+
+        }catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    public boolean addnewArena(List<String> addArenaInputs) {
+        try {
+            ArenaDTO arenaDTOnew = new ArenaDTO();
+            AdressDTO adressDTOnew = new AdressDTO();
+
+            arenaDTOnew.setName(addArenaInputs.get(0));
+
+            adressDTOnew.setStreet(addArenaInputs.get(1));
+            adressDTOnew.setStreetNumber(Integer.parseInt(addArenaInputs.get(2)));
+            adressDTOnew.setZipCode(Integer.parseInt(addArenaInputs.get(3)));
+            adressDTOnew.setCity(addArenaInputs.get(4));
+
+            arenaDTOnew.setAdress(adressDTOnew);
+
+            getArenaDTOS().add(arenaDTOnew);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
     private void createMockData() {
-
-
         createMockUsers();
         createMockAdresses();
         createMockCustomers();
         createMockArenas();
         createMockConcerts();
-
 
         concertDTOS = new ArrayList<>();
         concertDTOS.add(concertDTO);
@@ -119,5 +159,7 @@ public class GuiController {
         concertDTO4 = new ConcertDTO("Bombus", LocalDate.of(2023,7,30), 700.00, arenaDTO4,15);
         concertDTO5 = new ConcertDTO("Danko Jones", LocalDate.of(2023,11,13), 2000.00, arenaDTO5,15);
     }
+
+
 }
 
