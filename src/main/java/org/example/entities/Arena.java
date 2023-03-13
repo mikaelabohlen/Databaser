@@ -12,7 +12,7 @@ public class Arena {
     private String name;
     @Enumerated(EnumType.STRING)
     private Setting setting;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Address address;
 
