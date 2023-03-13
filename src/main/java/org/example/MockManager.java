@@ -176,8 +176,14 @@ public class MockManager {
         concert4.setArena(session.get(Arena.class, 4));
         session.persist(concert4);
 
+        Concert concert5 = new Concert();
+        concert5.setArtist("Rebellerna");
+        concert5.setDate(LocalDate.of(2023, 3, 30));
+        concert5.setPrice(199.99);
+        concert5.setAgeLimit(18);
+        concert1.setArena(session.get(Arena.class, 3));
+        session.persist(concert5);
 
-        
     }
 
 
