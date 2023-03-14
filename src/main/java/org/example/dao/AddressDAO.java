@@ -14,10 +14,10 @@ public class AddressDAO {
     public AddressDAO () {
         sessionFactory = SessionFactorySingleton.getSessionFactory();
     }
-    public void createAddress (Address arena) {
+    public void createAddress (Address address) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(arena);
+        session.save(address);
         session.getTransaction().commit();
         session.close();
     }

@@ -19,10 +19,11 @@ public class Customer {
     private LocalDate birthdate;
     private String phoneNumber;
     private String password;
+    private boolean admin;
     @OneToOne
     @JoinColumn
     private Address adress;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)//, cascade = CascadeType.ALL)
     @JoinTable(joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "concert_id")})
     private List<Concert> concerts;
@@ -76,6 +77,14 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public Address getAdress() {

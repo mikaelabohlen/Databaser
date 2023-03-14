@@ -17,7 +17,7 @@ public class Concert {
     @OneToOne
     @JoinColumn
     private Arena arena;
-    @ManyToMany(mappedBy = "concerts")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "concerts")
     private List<Customer> customers;
     public Concert(){
 
