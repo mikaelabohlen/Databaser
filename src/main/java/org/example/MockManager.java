@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockManager {
+    Controller controller = new Controller();
 
-    public void createMockAddress(Session session) {
+    public void createMockAddress() {
         Address address1 = new Address();
         address1.setStreetName("Violvägen");
         address1.setHouseNumber(4);
         address1.setCity("Kvissleby");
         address1.setZipCode(86234);
-        session.persist(address1);
+        controller.getAddressDAO().createAddress(address1);
 
 
         Address address2 = new Address();
@@ -27,7 +28,7 @@ public class MockManager {
         address2.setHouseNumber(14);
         address2.setCity("Mariestad");
         address2.setZipCode(54333);
-        session.persist(address2);
+        controller.getAddressDAO().createAddress(address2);
 
 
         Address address3 = new Address();
@@ -35,7 +36,7 @@ public class MockManager {
         address3.setHouseNumber(8);
         address3.setCity("Avesta");
         address3.setZipCode(77440);
-        session.persist(address3);
+        controller.getAddressDAO().createAddress(address3);
 
 
         Address address4 = new Address();
@@ -43,7 +44,7 @@ public class MockManager {
         address4.setHouseNumber(42);
         address4.setCity("Kristinehamn");
         address4.setZipCode(68198);
-        session.persist(address4);
+        controller.getAddressDAO().createAddress(address4);
 
 
         Address address5 = new Address();
@@ -51,66 +52,65 @@ public class MockManager {
         address5.setHouseNumber(12);
         address5.setCity("Ystad");
         address5.setZipCode(27898);
-        session.persist(address5);
+        controller.getAddressDAO().createAddress(address5);
     }
 
 
-    public void createMockArenas(Session session) {
+    public void createMockArenas() {
         Arena arena = new Arena();
         arena.setName("TheArena");
         arena.setSetting(Setting.INSIDE);
-        arena.setAddress(session.get(Address.class, 1));
-        session.persist(arena);
+        arena.setAddress(controller.getAddressDAO().getAddressById(1));
+        controller.getArenaDAO().createArena(arena);
 
 
         Arena arena2 = new Arena();
         arena2.setName("Operan");
         arena2.setSetting(Setting.INSIDE);
-        arena2.setAddress(session.get(Address.class, 1));
-        session.persist(arena2);
+        arena2.setAddress(controller.getAddressDAO().getAddressById(1));
+        controller.getArenaDAO().createArena(arena2);
 
 
         Arena arena3 = new Arena();
         arena3.setName("Kulturhus");
         arena3.setSetting(Setting.OUTSIDE);
-        arena3.setAddress(session.get(Address.class, 1));
-        session.persist(arena3);
-
-
+        arena3.setAddress(controller.getAddressDAO().getAddressById(1));
+        controller.getArenaDAO().createArena(arena3);
 
 
         Arena arena4 = new Arena();
         arena4.setName("Waldorfshuset");
         arena4.setSetting(Setting.INSIDE);
-        arena4.setAddress(session.get(Address.class, 1));
-        session.persist(arena4);
+        arena4.setAddress(controller.getAddressDAO().getAddressById(1));
+        controller.getArenaDAO().createArena(arena4);
 
 
         Arena arena5 = new Arena();
         arena5.setName("Ystad Arena");
         arena5.setSetting(Setting.OUTSIDE);
-        arena5.setAddress(session.get(Address.class, 1));
-        session.persist(arena5);
+        arena5.setAddress(controller.getAddressDAO().getAddressById(1));
+        controller.getArenaDAO().createArena(arena5);
     }
 
 
-    public void createMockCustomers(Session session) {
+    public void createMockCustomers() {
         Customer customer1 = new Customer();
         customer1.setFirstName("Allan");
         customer1.setLastName("Edwall");
         customer1.setBirthdate(LocalDate.of(1987, 6, 30));
         customer1.setPhoneNumber("+46738073634");
-        customer1.setAdress(session.get(Address.class, 1));
-        session.persist(customer1);
-
+        customer1.setAdress(controller.getAddressDAO().getAddressById(2));
+        customer1.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer1);
 
         Customer customer2 = new Customer();
         customer2.setFirstName("Helga");
         customer2.setLastName("Sköld");
         customer2.setBirthdate(LocalDate.of(1999, 5, 19));
         customer2.setPhoneNumber("+46736552166");
-        customer2.setAdress(session.get(Address.class, 3));
-        session.persist(customer2);
+        customer2.setAdress(controller.getAddressDAO().getAddressById(3));
+        customer2.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer2);
 
 
         Customer customer3 = new Customer();
@@ -118,8 +118,9 @@ public class MockManager {
         customer3.setLastName("Noor");
         customer3.setBirthdate(LocalDate.of(2001, 10, 27));
         customer3.setPhoneNumber("+46756341662");
-        customer3.setAdress(session.get(Address.class, 2));
-        session.persist(customer3);
+        customer3.setAdress(controller.getAddressDAO().getAddressById(1));
+        customer3.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer3);
 
 
         Customer customer4 = new Customer();
@@ -127,27 +128,38 @@ public class MockManager {
         customer4.setLastName("Petrov");
         customer4.setBirthdate(LocalDate.of(1989, 1, 1));
         customer4.setPhoneNumber("+4674777196");
-        customer4.setAdress(session.get(Address.class, 5));
-        session.persist(customer4);
+        customer4.setAdress(controller.getAddressDAO().getAddressById(4));
+        customer4.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer4);
 
         Customer customer5 = new Customer();
         customer5.setFirstName("Agnes");
         customer5.setLastName("Lund");
         customer5.setBirthdate(LocalDate.of(1950, 3, 15));
         customer5.setPhoneNumber("+46755513628");
-        customer5.setAdress(session.get(Address.class, 4));
-        session.persist(customer5);
+        customer5.setAdress(controller.getAddressDAO().getAddressById(5));
+        customer5.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer5);
+
+        Customer customer6 = new Customer();
+        customer6.setFirstName("Britt");
+        customer6.setLastName("Marie");
+        customer6.setBirthdate(LocalDate.of(2010, 1, 12));
+        customer6.setPhoneNumber("+46747677123");
+        customer6.setAdress(controller.getAddressDAO().getAddressById(5));
+        customer6.setAdmin(false);
+        controller.getCustomerDAO().createCustomer(customer6);
     }
 
 
-    public void createMockConcerts(Session session) {
+    public void createMockConcerts() {
         Concert concert1 = new Concert();
         concert1.setArtist("Babblarna");
         concert1.setDate(LocalDate.of(2023, 6, 5));
         concert1.setPrice(599.99);
         concert1.setAgeLimit(0);
-        concert1.setArena(session.get(Arena.class, 1));
-        session.persist(concert1);
+        concert1.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert1);
 
 
         Concert concert2 = new Concert();
@@ -155,8 +167,8 @@ public class MockManager {
         concert2.setDate(LocalDate.of(2023, 7, 30));
         concert2.setPrice(1599.99);
         concert2.setAgeLimit(3);
-        concert2.setArena(session.get(Arena.class, 5));
-        session.persist(concert2);
+        concert2.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert2);
 
 
         Concert concert3 = new Concert();
@@ -164,8 +176,8 @@ public class MockManager {
         concert3.setDate(LocalDate.of(2023, 4, 1));
         concert3.setPrice(799.99);
         concert3.setAgeLimit(12);
-        concert3.setArena(session.get(Arena.class, 2));
-        session.persist(concert3);
+        concert3.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert3);
 
 
         Concert concert4 = new Concert();
@@ -173,37 +185,73 @@ public class MockManager {
         concert4.setDate(LocalDate.of(2023, 7, 1));
         concert4.setPrice(299.99);
         concert4.setAgeLimit(18);
-        concert4.setArena(session.get(Arena.class, 4));
-        session.persist(concert4);
+        concert4.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert4);
 
         Concert concert5 = new Concert();
         concert5.setArtist("Rebellerna");
         concert5.setDate(LocalDate.of(2023, 3, 30));
         concert5.setPrice(199.99);
         concert5.setAgeLimit(18);
-        concert1.setArena(session.get(Arena.class, 3));
-        session.persist(concert5);
+        concert5.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert5);
+
+        Concert concert6 = new Concert();
+        concert6.setArtist("Bamse On Ice");
+        concert6.setDate(LocalDate.of(2023, 7, 15));
+        concert6.setPrice(2000.00);
+        concert6.setAgeLimit(0);
+        concert6.setArena(controller.getArenaDAO().getArenaById(1));
+        controller.getConcertDAO().createConcert(concert6);
 
     }
 
 
-    public void createMockLinks(Session session){
+    public void createMockLinks(){
         //Denna bör göras klart först när DAON är klar?.
 
         //Mocklink customer1 consert ALL(hittills)=
-        Customer customer1 = session.get(Customer.class, 1);
+        Customer customer1 = controller.getCustomerDAO().getCustomerById(1);
         List<Concert> concerts1 = new ArrayList<>();
-        concerts1.add(session.get(Concert.class, 2));
-        concerts1.add(session.get(Concert.class, 1));
+        concerts1.add(controller.getConcertDAO().getConcertById(2));
+        concerts1.add(controller.getConcertDAO().getConcertById(1));
         customer1.setConcerts(concerts1);
-
-        session.update(customer1);
+        controller.getCustomerDAO().updateCustomer(customer1);
 
         //Mocklink customer2 Concert 2
-        Customer customer2 = session.get(Customer.class, 2);
+        Customer customer2 = controller.getCustomerDAO().getCustomerById(1);
         List<Concert> concerts2 = new ArrayList<>();
-        concerts2.add(session.get(Concert.class, 2));
+        concerts2.add(controller.getConcertDAO().getConcertById(4));
+        concerts2.add(controller.getConcertDAO().getConcertById(5));
         customer2.setConcerts(concerts2);
-        session.update(customer2);
+        controller.getCustomerDAO().updateCustomer(customer2);
+
+        //Mocklink customer 5 concert 3 and 4
+
+        Customer customer5 = controller.getCustomerDAO().getCustomerById(5);
+        List<Concert> concerts5 = new ArrayList<>();
+        concerts5.add(controller.getConcertDAO().getConcertById(3));
+        concerts5.add(controller.getConcertDAO().getConcertById(4));
+        customer5.setConcerts(concerts5);
+        controller.getCustomerDAO().updateCustomer(customer5);
+
+        //Mocklink customer 4, concert all but 3
+        Customer customer4 = controller.getCustomerDAO().getCustomerById(5);
+        List<Concert> concerts4 = new ArrayList<>();
+        concerts5.add(controller.getConcertDAO().getConcertById(1));
+        concerts5.add(controller.getConcertDAO().getConcertById(2));
+        concerts5.add(controller.getConcertDAO().getConcertById(4));
+        concerts5.add(controller.getConcertDAO().getConcertById(5));
+        concerts5.add(controller.getConcertDAO().getConcertById(6));
+        customer5.setConcerts(concerts4);
+        controller.getCustomerDAO().updateCustomer(customer4);
+
+        //MockLink customer 6, concert 5 and 6
+        Customer customer6 = controller.getCustomerDAO().getCustomerById(6);
+        List<Concert> concerts6 = new ArrayList<>();
+        concerts6.add(controller.getConcertDAO().getConcertById(5));
+        concerts6.add(controller.getConcertDAO().getConcertById(6));
+        customer6.setConcerts(concerts6);
+        controller.getCustomerDAO().updateCustomer(customer6);
     }
 }
