@@ -2,9 +2,11 @@ package org.example.dao;
 
 import org.example.SessionFactorySingleton;
 import org.example.entities.Arena;
+import org.example.entities.Concert;
 import org.example.entities.Customer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -29,6 +31,17 @@ public class ArenaDAO {
         session.close();
 
         return arena;
+    }
+    public List<Arena> getArenaByName (String name) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("FROM Arena WHERE name = :name");
+        query.setParameter("name", name);
+        List<Arena> arenas = query.list();
+        session.getTransaction().commit();
+        session.close();
+
+        return arenas;
     }
 
     public List<Arena> getAllArenas() {
