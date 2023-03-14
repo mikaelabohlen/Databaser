@@ -12,7 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockManager {
-    Controller controller = new Controller();
+
+    private Controller controller;
+
+    public MockManager (Controller controller) {
+        this.controller = controller;
+    }
 
     public void createMockAddress() {
         Address address1 = new Address();
@@ -53,6 +58,41 @@ public class MockManager {
         address5.setCity("Ystad");
         address5.setZipCode(27898);
         controller.getAddressDAO().createAddress(address5);
+
+        Address address6 = new Address();
+        address6.setStreetName("Surikatvägen");
+        address6.setHouseNumber(43);
+        address6.setCity("Kiruna");
+        address6.setZipCode(30672);
+        controller.getAddressDAO().createAddress(address6);
+
+        Address address7 = new Address();
+        address7.setStreetName("Strandgatan");
+        address7.setHouseNumber(6);
+        address7.setCity("Sundsvall");
+        address7.setZipCode(85689);
+        controller.getAddressDAO().createAddress(address7);
+
+        Address address8 = new Address();
+        address8.setStreetName("Storgatan");
+        address8.setHouseNumber(99);
+        address8.setCity("Umeå");
+        address8.setZipCode(28904);
+        controller.getAddressDAO().createAddress(address8);
+
+        Address address9 = new Address();
+        address9.setStreetName("Guldvägen");
+        address9.setHouseNumber(6);
+        address9.setCity("Göteborg");
+        address9.setZipCode(67592);
+        controller.getAddressDAO().createAddress(address9);
+
+        Address address10 = new Address();
+        address10.setStreetName("Fågelgatan");
+        address10.setHouseNumber(2);
+        address10.setCity("Bromma");
+        address10.setZipCode(70524);
+        controller.getAddressDAO().createAddress(address10);
     }
 
 
@@ -60,35 +100,35 @@ public class MockManager {
         Arena arena = new Arena();
         arena.setName("TheArena");
         arena.setSetting(Setting.INSIDE);
-        arena.setAddress(controller.getAddressDAO().getAddressById(1));
+        arena.setAddress(controller.getAddressDAO().getAddressById(10));
         controller.getArenaDAO().createArena(arena);
 
 
         Arena arena2 = new Arena();
         arena2.setName("Operan");
         arena2.setSetting(Setting.INSIDE);
-        arena2.setAddress(controller.getAddressDAO().getAddressById(1));
+        arena2.setAddress(controller.getAddressDAO().getAddressById(9));
         controller.getArenaDAO().createArena(arena2);
 
 
         Arena arena3 = new Arena();
         arena3.setName("Kulturhus");
         arena3.setSetting(Setting.OUTSIDE);
-        arena3.setAddress(controller.getAddressDAO().getAddressById(1));
+        arena3.setAddress(controller.getAddressDAO().getAddressById(8));
         controller.getArenaDAO().createArena(arena3);
 
 
         Arena arena4 = new Arena();
         arena4.setName("Waldorfshuset");
         arena4.setSetting(Setting.INSIDE);
-        arena4.setAddress(controller.getAddressDAO().getAddressById(1));
+        arena4.setAddress(controller.getAddressDAO().getAddressById(7));
         controller.getArenaDAO().createArena(arena4);
 
 
         Arena arena5 = new Arena();
         arena5.setName("Ystad Arena");
         arena5.setSetting(Setting.OUTSIDE);
-        arena5.setAddress(controller.getAddressDAO().getAddressById(1));
+        arena5.setAddress(controller.getAddressDAO().getAddressById(6));
         controller.getArenaDAO().createArena(arena5);
     }
 
@@ -112,7 +152,6 @@ public class MockManager {
         customer2.setAdmin(false);
         controller.getCustomerDAO().createCustomer(customer2);
 
-
         Customer customer3 = new Customer();
         customer3.setFirstName("Samira");
         customer3.setLastName("Noor");
@@ -121,7 +160,6 @@ public class MockManager {
         customer3.setAdress(controller.getAddressDAO().getAddressById(1));
         customer3.setAdmin(false);
         controller.getCustomerDAO().createCustomer(customer3);
-
 
         Customer customer4 = new Customer();
         customer4.setFirstName("Nicholai");
