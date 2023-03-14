@@ -4,6 +4,7 @@ import org.example.SessionFactorySingleton;
 import org.example.entities.Customer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -29,6 +30,17 @@ public class CustomerDAO {
         session.close();
 
         return customer;
+    }
+    public List<Customer> getCustomerByName (String name) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("FROM Customer WHERE firstName = :name");
+        query.setParameter("name", name);
+        List<Customer> customers = query.list();
+        session.getTransaction().commit();
+        session.close();
+
+        return customers;
     }
 
     public List<Customer> getAllCustomers() {

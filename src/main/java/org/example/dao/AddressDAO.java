@@ -2,8 +2,10 @@ package org.example.dao;
 
 import org.example.SessionFactorySingleton;
 import org.example.entities.Address;
+import org.example.entities.Concert;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -29,6 +31,17 @@ public class AddressDAO {
         session.close();
 
         return address;
+    }
+    public List<Address> getConcertByArtist (String streetName) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("FROM Address WHERE streetName = :streetName");
+        query.setParameter("streetName", streetName);
+        List<Address> addresses = query.list();
+        session.getTransaction().commit();
+        session.close();
+
+        return addresses;
     }
 
     public List<Address> getAllAddresses() {
