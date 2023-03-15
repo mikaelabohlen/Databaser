@@ -1,7 +1,7 @@
 package org.example.entities;
 
-import org.example.entities.Address;
-import org.example.entities.Concert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -22,8 +22,10 @@ public class Customer {
     private boolean admin;
     @OneToOne
     @JoinColumn
-    private Address adress;
+    private Address address;
+
     @ManyToMany(fetch = FetchType.EAGER)//, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "concert_id")})
     private List<Concert> concerts;
@@ -87,12 +89,12 @@ public class Customer {
         this.admin = admin;
     }
 
-    public Address getAdress() {
-        return adress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAdress(Address adress) {
-        this.adress = adress;
+    public void setAddress(Address adress) {
+        this.address = adress;
     }
 
     public List<Concert> getConcerts() {
