@@ -9,9 +9,9 @@ import java.util.List;
 public class GuiController {
 
     private UserDTO demoUserDTO, demoUser2DTO, demoAdmin;
+    private UserDTO activeUser;
     private AdressDTO adressDTO, adressDTO2, adressDTO3, adressDTO4, adressDTO5;
     private ConcertDTO concertDTO, concertDTO2, concertDTO3, concertDTO4, concertDTO5;
-    private CustomerDTO customerDTO;
     private ArenaDTO arenaDTO, arenaDTO2, arenaDTO3, arenaDTO4, arenaDTO5;
 
     private List<ConcertDTO> concertDTOS;
@@ -25,16 +25,22 @@ public class GuiController {
         return arenaDTOS;
     }
 
+    public UserDTO getActiveUser() {
+        return activeUser;
+    }
+
     public GuiController() {
         createMockData();
     }
 
     public boolean validateLogin(String userName, String password) {
+        activeUser = new UserDTO();
         for (UserDTO userDTO : userDTOS) {
             if (userDTO.isAdmin()) {
                 continue;
             }
             if (userDTO.getUserName().equals(userName) && userDTO.getPassword().equals(password)) {
+                activeUser = userDTO;
                 return true;
             }
         }
@@ -95,6 +101,41 @@ public class GuiController {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public boolean registerNewUser(List<String> addRegisterInputs) {
+        try {
+            UserDTO userDTOnew = new UserDTO();
+            AdressDTO adressDTOnewUser = new AdressDTO();
+
+            userDTOnew.setUserName(addRegisterInputs.get(0));
+            userDTOnew.setPassword(validatePassword(addRegisterInputs.get(1), addRegisterInputs.get(2)));
+
+            adressDTOnewUser.setStreet(addRegisterInputs.get(3));
+            adressDTOnewUser.setStreetNumber(Integer.parseInt(addRegisterInputs.get(4)));
+            adressDTOnewUser.setZipCode(Integer.parseInt(addRegisterInputs.get(5)));
+            adressDTOnewUser.setCity(addRegisterInputs.get(6));
+
+            userDTOnew.setAdressDTO(adressDTOnewUser);
+
+            userDTOS.add(userDTOnew);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void addToUserConcert(int index) {
+        activeUser.getConcerts().add(getConcertDTOS().get(index));
+    }
+
+    private String validatePassword(String password, String confirmPassword) {
+        if(password.equals(confirmPassword)) {
+            return password;
+        }
+        else {
+            return null;
         }
     }
 
@@ -159,7 +200,6 @@ public class GuiController {
         concertDTO4 = new ConcertDTO("Bombus", LocalDate.of(2023,7,30), 700.00, arenaDTO4,15);
         concertDTO5 = new ConcertDTO("Danko Jones", LocalDate.of(2023,11,13), 2000.00, arenaDTO5,15);
     }
-
 
 }
 

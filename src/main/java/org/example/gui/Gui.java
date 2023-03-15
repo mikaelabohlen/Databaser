@@ -9,8 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.sql.Array;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,7 +165,7 @@ public class Gui {
         private ChoiceBox<String> currencyChoiceBox;
         private ObservableList<String> currency;
         private Label[] prices;
-        private Button[] buys;
+        private ArrayList<Button> buys;
 
         //ADMIN ADD ARENAS VIEW
         private GridPane adminAddArenaGridPane;
@@ -393,7 +391,8 @@ public class Gui {
         private Scene registerScene;
 
         private Label registerHeaderLabel, usernameRegisterLabel, passwordRegisterLabel, passwordComfirmRegisterLabel;
-        private TextField usernameRegisterTextField;
+        private Label registerAdressStreetLabel, registerAdressHouseNumberLabel, registerAdressZipCodeLabel, registerAdressCityLabel, registerAdressAdressLabel;
+        private TextField usernameRegisterTextField, registerAdressStreetTextField, registerAdressHouseNumberTextField,registerAdressZipCodeTextField,registerAdressCityTextField;
         private PasswordField passwordRegisterPasswordField, passwordConfirmRegisterPasswordField;
         private Button registerSubmitButton, registerCancelButton;
         private GridPane registerMainGrid;
@@ -401,7 +400,7 @@ public class Gui {
         public void setupRegister() {
             registerStage = new Stage();
             registerPane = new BorderPane();
-            registerScene = new Scene(registerPane, 240, 200);
+            registerScene = new Scene(registerPane, 230, 350);
             registerStage.setScene(registerScene);
 
             registerMainGrid = new GridPane();
@@ -416,10 +415,31 @@ public class Gui {
             usernameRegisterLabel = new Label("Username:");
             passwordRegisterLabel = new Label("Password:");
             passwordComfirmRegisterLabel = new Label("Confirm Password:");
+            registerAdressAdressLabel = new Label("Adress");
+            registerAdressStreetLabel = new Label("Street:");
+            registerAdressHouseNumberLabel = new Label("Nr:");
+            registerAdressZipCodeLabel = new Label("ZipCode:");
+            registerAdressCityLabel = new Label("City:");
 
             usernameRegisterTextField = new TextField();
             usernameRegisterTextField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
             usernameRegisterTextField.setPrefWidth(STANDARD_BUTTON_WIDTH);
+
+            registerAdressStreetTextField = new TextField();
+            registerAdressStreetTextField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            registerAdressStreetTextField.setPrefWidth(STANDARD_BUTTON_WIDTH);
+
+            registerAdressHouseNumberTextField = new TextField();
+            registerAdressHouseNumberTextField.setPrefWidth(STANDARD_BUTTON_WIDTH);
+            registerAdressHouseNumberTextField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+
+            registerAdressZipCodeTextField = new TextField();
+            registerAdressZipCodeTextField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            registerAdressZipCodeTextField.setPrefWidth(STANDARD_BUTTON_WIDTH);
+
+            registerAdressCityTextField = new TextField();
+            registerAdressCityTextField.setPrefWidth(STANDARD_BUTTON_WIDTH);
+            registerAdressCityTextField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
 
             passwordRegisterPasswordField = new PasswordField();
             passwordRegisterPasswordField.setPrefHeight(STANDARD_BUTTON_HEIGHT);
@@ -443,8 +463,17 @@ public class Gui {
             registerMainGrid.add(passwordRegisterPasswordField, 1,1,1,1);
             registerMainGrid.add(passwordComfirmRegisterLabel, 0,2,1,1);
             registerMainGrid.add(passwordConfirmRegisterPasswordField, 1,2,1,1);
-            registerMainGrid.add(registerSubmitButton, 0,3,1,1);
-            registerMainGrid.add(registerCancelButton, 1,3,1,1);
+            registerMainGrid.add(registerAdressAdressLabel, 0,3,1,1);
+            registerMainGrid.add(registerAdressStreetLabel,0,4,1,1);
+            registerMainGrid.add(registerAdressStreetTextField, 1,4,1,1);
+            registerMainGrid.add(registerAdressHouseNumberLabel,0,5,1,1);
+            registerMainGrid.add(registerAdressHouseNumberTextField,1,5,1,1);
+            registerMainGrid.add(registerAdressZipCodeLabel,0,6,1,1);
+            registerMainGrid.add(registerAdressZipCodeTextField,1,6,1,1);
+            registerMainGrid.add(registerAdressCityLabel,0,7,1,1);
+            registerMainGrid.add(registerAdressCityTextField,1,7,1,1);
+            registerMainGrid.add(registerSubmitButton, 0,8,1,1);
+            registerMainGrid.add(registerCancelButton, 1,8,1,1);
 
             registerPane.setTop(registerHeaderLabel);
             registerPane.setCenter(registerMainGrid);
@@ -534,8 +563,6 @@ public class Gui {
             center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.concertListAdmin);
 
             handleCancelButtons();
-        /*    clearConcertsAdmin();
-            listConcertsAdmin();*/
         });
 
     }
@@ -641,18 +668,72 @@ public class Gui {
     }
 
     private void handleRegisterSubmitButton() {
+
         register.registerSubmitButton.setOnMouseClicked(event-> {
-            //TODO
+            boolean userAdded;
+            List<String> addRegisterInputs = new ArrayList<>();
+            addRegisterInputs.add(register.usernameRegisterTextField.getText());
+            addRegisterInputs.add(register.passwordRegisterPasswordField.getText());
+            addRegisterInputs.add(register.passwordConfirmRegisterPasswordField.getText());
+            addRegisterInputs.add(register.registerAdressStreetTextField.getText());
+            addRegisterInputs.add(register.registerAdressHouseNumberTextField.getText());
+            addRegisterInputs.add(register.registerAdressZipCodeTextField.getText());
+            addRegisterInputs.add(register.registerAdressCityTextField.getText());
+
+            userAdded = controller.registerNewUser(addRegisterInputs);
+
+            if(userAdded) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Registration successful");
+                alert.setHeaderText("Username: " + register.usernameRegisterTextField.getText());
+                alert.showAndWait();
+
+                register.usernameRegisterTextField.clear();
+                register.passwordRegisterPasswordField.clear();
+                register.passwordConfirmRegisterPasswordField.clear();
+                register.registerAdressStreetTextField.clear();
+                register.registerAdressHouseNumberTextField.clear();
+                register.registerAdressZipCodeTextField.clear();
+                register.registerAdressCityTextField.clear();
+                register.registerStage.hide();
+            }
+
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Registration unsuccessful");
+                alert.setHeaderText("Something went wrong");
+                alert.showAndWait();
+            }
         });
+    }
+
+    private void handleBuyButton() {
+        for(int i=0; i<center.buys.size(); i++) {
+            int index = i;
+            center.buys.get(i).setOnMouseClicked(event-> {
+                center.buys.get(index).setText("Bought");
+                center.buys.get(index).setDisable(true);
+                System.out.println(index);
+                System.out.println(controller.getConcertDTOS().get(index).getArtist());
+                controller.addToUserConcert(index);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Ticket Bought");
+                alert.setHeaderText("You bought a ticket for " + controller.getConcertDTOS().get(index).getArtist());
+                alert.setContentText("Date: " + controller.getConcertDTOS().get(index).getDate());
+                alert.showAndWait();
+            });
+        }
     }
 
     //LOGGED USER IN BUTTONS
     private void handleBoughtTicketsButton() {
         top.boughtTicketsButton.setOnMouseClicked(event-> {
             center.headerLabel.setText("Bought Tickets");
-            clearList();
             center.loggedInViewHeaderHBox.getChildren().clear();
             center.loggedInViewHeaderHBox.getChildren().add(center.headerLabel);
+            center.loggedInViewMainVBox.getChildren().remove(center.concertListUser);
+            center.loggedInViewMainVBox.getChildren().add(center.concertListUser);
+            listUserBoughtConcerts();
         });
     }
 
@@ -664,7 +745,11 @@ public class Gui {
             center.headerLabel.setText("Buy Tickets");
             center.loggedInViewMainVBox.getChildren().remove(center.concertListUser);
             center.loggedInViewMainVBox.getChildren().add(center.concertListUser);
-            listConcertsUser();
+            for(int i=0; i<controller.getActiveUser().getConcerts().size(); i++) {
+                System.out.println(controller.getActiveUser().getConcerts().get(i).getArtist());
+            }
+            listAvailableConcertsUser();
+            handleBuyButton();
         });
     }
 
@@ -759,12 +844,12 @@ public class Gui {
         top.startViewGridPane.add(top.logoutButton,0,2,1,1);
     }
 
-    private void listConcertsUser() {
+    private void listAvailableConcertsUser() {
         int numOfConcerts = controller.getConcertDTOS().size();
+        center.buys = new ArrayList<>();
         clearList();
         addListHeaders();
         center.prices = new Label[numOfConcerts];
-        center.buys = new Button[numOfConcerts];
         for(int i=0; i<numOfConcerts; i++) {
 
             Label artist = new Label();
@@ -780,17 +865,60 @@ public class Gui {
             date.setText(String.valueOf(controller.getConcertDTOS().get(i).getDate()));
             price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));
 
-            center.concertListUser.add(artist, 0, i+1, 1, 1);
-            center.concertListUser.add(arena, 1, i+1, 1, 1);
-            center.concertListUser.add(ageLimit, 2, i+1, 1, 1);
-            center.concertListUser.add(date, 3, i+1, 1, 1);
-            center.concertListUser.add(price, 4,i+1,1,1);
-            center.concertListUser.add(buy,5,i+1,1,1);
-            center.buys[i]=buy;
-            center.prices[i]=price;
+            center.concertListUser.add(artist, 0, i + 1, 1, 1);
+            center.concertListUser.add(arena, 1, i + 1, 1, 1);
+            center.concertListUser.add(ageLimit, 2, i + 1, 1, 1);
+            center.concertListUser.add(date, 3, i + 1, 1, 1);
+            center.concertListUser.add(price, 4, i + 1, 1, 1);
+
+            try {
+                for(int j=0; j<controller.getActiveUser().getConcerts().size(); j++) {
+                    if(controller.getActiveUser().getConcerts().get(j).getArtist().equals(artist.getText())) {
+                        buy.setText("Bought");
+                        buy.setDisable(true);
+                    }
+                }
+
+            } catch (IndexOutOfBoundsException ignored) {
+
+            }
+
+            center.concertListUser.add(buy, 5, i + 1, 1, 1);
+            center.buys.add(buy);
+            center.prices[i] = price;
+
         }
     }
 
+    private void listUserBoughtConcerts() {
+        try {
+            int numOfConcerts = controller.getActiveUser().getConcerts().size();
+            clearList();
+            for(int i=0; i<numOfConcerts; i++) {
+
+                Label artist = new Label();
+                Label arena = new Label();
+                Label ageLimit = new Label();
+                Label date = new Label();
+                Label price = new Label();
+
+                artist.setText(controller.getActiveUser().getConcerts().get(i).getArtist());
+                arena.setText(controller.getActiveUser().getConcerts().get(i).getArena().getName());
+                ageLimit.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getAgeLimit()));
+                date.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getDate()));
+                price.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getPrice()));
+
+                center.concertListUser.add(artist, 0, i + 1, 1, 1);
+                center.concertListUser.add(arena, 1, i + 1, 1, 1);
+                center.concertListUser.add(ageLimit, 2, i + 1, 1, 1);
+                center.concertListUser.add(date, 3, i + 1, 1, 1);
+                center.concertListUser.add(price, 4, i + 1, 1, 1);
+            }
+        } catch (NullPointerException ignored) {
+
+        }
+
+    }
     private void listConcertsAdmin() {
         int numOfConcerts = controller.getConcertDTOS().size();
         center.cancels = new ArrayList();
