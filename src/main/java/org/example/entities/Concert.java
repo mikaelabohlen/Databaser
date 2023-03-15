@@ -1,5 +1,8 @@
 package org.example.entities;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 import java.time.LocalDate;
@@ -18,6 +21,7 @@ public class Concert {
     @JoinColumn
     private Arena arena;
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "concerts")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Customer> customers;
     public Concert(){
 

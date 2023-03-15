@@ -5,7 +5,6 @@ import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
 import org.example.enums.Setting;
-import org.hibernate.Session;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -134,13 +133,23 @@ public class MockManager {
 
 
     public void createMockCustomers() {
+        Customer customer0 = new Customer();
+        customer0.setFirstName("Admin");
+        customer0.setLastName("Admin");
+        customer0.setBirthdate(LocalDate.of(1987, 6, 30));
+        customer0.setPhoneNumber("+46738073634");
+        customer0.setAddress(controller.getAddressDAO().getAddressById(2));
+        customer0.setAdmin(true);
+        customer0.setPassword("hej");
+        controller.getCustomerDAO().createCustomer(customer0);
+
         Customer customer1 = new Customer();
         customer1.setFirstName("Allan");
         customer1.setLastName("Edwall");
         customer1.setBirthdate(LocalDate.of(1987, 6, 30));
         customer1.setPhoneNumber("+46738073634");
-        customer1.setAdress(controller.getAddressDAO().getAddressById(2));
-        customer1.setAdmin(false);
+        customer1.setAddress(controller.getAddressDAO().getAddressById(2));
+        customer1.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer1);
 
         Customer customer2 = new Customer();
@@ -148,8 +157,8 @@ public class MockManager {
         customer2.setLastName("Sköld");
         customer2.setBirthdate(LocalDate.of(1999, 5, 19));
         customer2.setPhoneNumber("+46736552166");
-        customer2.setAdress(controller.getAddressDAO().getAddressById(3));
-        customer2.setAdmin(false);
+        customer2.setAddress(controller.getAddressDAO().getAddressById(3));
+        customer2.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer2);
 
         Customer customer3 = new Customer();
@@ -157,8 +166,8 @@ public class MockManager {
         customer3.setLastName("Noor");
         customer3.setBirthdate(LocalDate.of(2001, 10, 27));
         customer3.setPhoneNumber("+46756341662");
-        customer3.setAdress(controller.getAddressDAO().getAddressById(1));
-        customer3.setAdmin(false);
+        customer3.setAddress(controller.getAddressDAO().getAddressById(1));
+        customer3.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer3);
 
         Customer customer4 = new Customer();
@@ -166,8 +175,8 @@ public class MockManager {
         customer4.setLastName("Petrov");
         customer4.setBirthdate(LocalDate.of(1989, 1, 1));
         customer4.setPhoneNumber("+4674777196");
-        customer4.setAdress(controller.getAddressDAO().getAddressById(4));
-        customer4.setAdmin(false);
+        customer4.setAddress(controller.getAddressDAO().getAddressById(4));
+        customer4.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer4);
 
         Customer customer5 = new Customer();
@@ -175,8 +184,8 @@ public class MockManager {
         customer5.setLastName("Lund");
         customer5.setBirthdate(LocalDate.of(1950, 3, 15));
         customer5.setPhoneNumber("+46755513628");
-        customer5.setAdress(controller.getAddressDAO().getAddressById(5));
-        customer5.setAdmin(false);
+        customer5.setAddress(controller.getAddressDAO().getAddressById(5));
+        customer5.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer5);
 
         Customer customer6 = new Customer();
@@ -184,8 +193,8 @@ public class MockManager {
         customer6.setLastName("Marie");
         customer6.setBirthdate(LocalDate.of(2010, 1, 12));
         customer6.setPhoneNumber("+46747677123");
-        customer6.setAdress(controller.getAddressDAO().getAddressById(5));
-        customer6.setAdmin(false);
+        customer6.setAddress(controller.getAddressDAO().getAddressById(5));
+        customer6.setPassword("hej");
         controller.getCustomerDAO().createCustomer(customer6);
     }
 

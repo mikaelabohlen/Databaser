@@ -4,16 +4,19 @@ import org.example.dao.AddressDAO;
 import org.example.dao.ArenaDAO;
 import org.example.dao.ConcertDAO;
 import org.example.dao.CustomerDAO;
+import org.example.entities.Address;
 import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
-import org.example.gui.guidto.ConcertDTO;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class Controller {
+    List<Concert> concertList;
+    List<Customer> customerList;
+    List<Arena> arenaList;
 
     private Customer currentCustomer;
     private AddressDAO addressDAO;
@@ -70,26 +73,58 @@ public class Controller {
     }
 
     public void setUpMockData(){
-        mockManager.createMockAddress(this);
-        mockManager.createMockArenas(this);
-        mockManager.createMockCustomers(this);
-        mockManager.createMockConcerts(this);
-        mockManager.createMockLinks(this);
+        mockManager.createMockAddress();
+        mockManager.createMockArenas();
+        mockManager.createMockCustomers();
+        mockManager.createMockConcerts();
+        mockManager.createMockLinks();
     }
 
-    public boolean addNewConcert(ConcertDTO concertDTO){
-        Concert concert = new Concert();
-        concert.setArtist(concertDTO.getArtist());
-        concert.setDate(concertDTO.getDate());
-        concert.setPrice(concertDTO.getPrice());
-        concert.setAgeLimit(concertDTO.getAgeLimit());
-//        concert.setArena(arenaDAO.getArenaByName(concertDTO.getArenaValue()));
-        concert.setArena(setArenaValue(concertDTO.getArenaName()));
-        concertDAO.createConcert(concert);
-        return true;
+    public boolean addNewConcert(List<String> addConcertInputs){
+        try {
+            Concert concert = new Concert();
+            concert.setArtist(addConcertInputs.get(0));
+            concert.setDate(LocalDate.parse(addConcertInputs.get(1)));
+            concert.setPrice(Double.parseDouble(addConcertInputs.get(2)));
+            concert.setAgeLimit(Integer.parseInt(addConcertInputs.get(3)));
+
+            arenaList = arenaDAO.getAllArenas();
+            for (Arena arena : arenaList) {
+                if (arena.getName().equals(addConcertInputs.get(4))) {
+                    concert.setArena(arena);
+                }
+            }
+            concertDAO.createConcert(concert);
+            return true;
+
+        }catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean addNewArena(List<String> addArenaInputs) {
+        try {
+            Arena arena = new Arena();
+            Address address= new Address();
+
+            arena.setName(addArenaInputs.get(0));
+
+            address.setStreetName(addArenaInputs.get(1));
+            address.setHouseNumber(Integer.parseInt(addArenaInputs.get(2)));
+            address.setZipCode(Integer.parseInt(addArenaInputs.get(3)));
+            address.setCity(addArenaInputs.get(4));
+
+            addressDAO.createAddress(address);
+            arena.setAddress(address);
+            arenaDAO.createArena(arena);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     public boolean validateLogin(String userName, String password) {
-        for (Customer customer : customerDAO.getAllCustomers()) {
+        customerList = customerDAO.getAllCustomers();
+        for (Customer customer : customerList) {
             if (customer.isAdmin()) {
                 continue;
             }
@@ -100,7 +135,8 @@ public class Controller {
         return false;
     }
     public boolean validateLoginAdmin(String userName, String password) {
-        for (Customer customer : customerDAO.getAllCustomers()) {
+        customerList = customerDAO.getAllCustomers();
+        for (Customer customer : customerList) {
             if (!customer.isAdmin()) {
                 continue;
             }
@@ -111,7 +147,8 @@ public class Controller {
         return false;
     }
     public void listCustomersForAllConcerts() {
-        for (Concert concert : concertDAO.getAllConcerts()) {
+        concertList = concertDAO.getAllConcerts();
+        for (Concert concert: concertList) {
             System.out.println("\n" + concert.getArtist() + ":");
             for (int i = 0; i < concert.getCustomers().size(); i++) {
                 System.out.println(concert.getCustomers().get(i).getFirstName() + " " + concert.getCustomers().get(i).getLastName());
@@ -141,18 +178,22 @@ public class Controller {
 
     }
 
-    public Arena setArenaValue(String value) {
-        for(int i=0; i<getArenaDAO().getAllArenas().size(); i++) {
-            if(getArenaDAO().getAllArenas().get(i).getName().equals(value)) {
-                return  getArenaDAO().getAllArenas().get(i);
-            }
-        }
-        return null;
+//    public Arena setArenaValue(String value) {
+//        for(int i=0; i<getArenaDAO().getAllArenas().size(); i++) {
+//            if(getArenaDAO().getAllArenas().get(i).getName().equals(value)) {
+//                return  getArenaDAO().getAllArenas().get(i);
+//            }
+//        }
+//        return null;
+//    }
+
+    public void deleteConcert(int index) {
+        Concert concert = concertDAO.getAllConcerts().get(index);
+//        concert.getCustomers().clear();
+//        concertDAO.updateConcert(concert);
+        concertDAO.deleteConcert(concert.getId());
     }
 
-    public boolean addNewArena(List<String> addArenaInputs) {
-        return true;
-    }
 //
 //    public void linkCustomersConcerts(Customer customer, List<Concert> concerts) { //buyTicket eller dylikt
 //        customer.setConcerts(concerts);
