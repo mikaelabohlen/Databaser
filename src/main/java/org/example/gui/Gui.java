@@ -8,6 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.example.gui.guidto.ArenaDTO;
+import org.example.gui.guidto.ConcertDTO;
+import org.example.gui.guidto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -622,7 +625,7 @@ public class Gui {
                 alert.setTitle("Concert added");
                 alert.setHeaderText("Artist: " + center.concertArtistTextField.getText());
                 alert.setContentText("Date: " + center.concertDateTextField.getText() + "\n" +
-                                     "Arena: " + center.arenasChoiceBox.getValue());
+                        "Arena: " + center.arenasChoiceBox.getValue());
                 alert.showAndWait();
 
                 center.concertDateTextField.clear();
@@ -643,15 +646,16 @@ public class Gui {
     }
 
     private void handleCancelButtons() {
+        List<ConcertDTO> concerts = controller.getConcertDTOS();
         for (int i = 0; i <center.cancels.size(); i++) {
-            int concert = i;
+            int index = i;
             center.cancels.get(i).setOnMouseClicked(event -> {
-                center.cancels.get(concert).setText("Canceled");
-                center.cancels.get(concert).setDisable(true);
-                center.cancels.remove(concert);
-                System.out.println(concert);
-                System.out.println(controller.getConcertDTOS().get(concert).getArtist());
-                controller.getConcertDTOS().remove(concert);
+                center.cancels.get(index).setText("Canceled");
+                center.cancels.get(index).setDisable(true);
+                center.cancels.remove(index);
+                System.out.println(index);
+                System.out.println(concerts.get(index).getArtist());
+                controller.getConcertDTOS().remove(index); // Ropa på delete concert metod
                 handleCancelButtons();
             });
         }
@@ -708,10 +712,24 @@ public class Gui {
     }
 
     private void handleBuyButton() {
+        List<ConcertDTO> concerts = controller.getConcertDTOS();
+
         for(int i=0; i<center.buys.size(); i++) {
             int index = i;
             center.buys.get(i).setOnMouseClicked(event-> {
+
                 center.buys.get(index).setText("Bought");
+                center.buys.get(index).setDisable(true);
+                System.out.println(index);
+                System.out.println(concerts.get(index).getArtist());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Ticket Bought");
+                alert.setHeaderText("You bought a ticket for " + concerts.get(index).getArtist());
+                alert.setContentText("Date: " + concerts.get(index).getDate());
+                alert.showAndWait();
+
+                controller.addToUserConcert(index);
+                /*center.buys.get(index).setText("Bought");
                 center.buys.get(index).setDisable(true);
                 System.out.println(index);
                 System.out.println(controller.getConcertDTOS().get(index).getArtist());
@@ -720,7 +738,7 @@ public class Gui {
                 alert.setTitle("Ticket Bought");
                 alert.setHeaderText("You bought a ticket for " + controller.getConcertDTOS().get(index).getArtist());
                 alert.setContentText("Date: " + controller.getConcertDTOS().get(index).getDate());
-                alert.showAndWait();
+                alert.showAndWait();*/
             });
         }
     }
@@ -745,9 +763,9 @@ public class Gui {
             center.headerLabel.setText("Buy Tickets");
             center.loggedInViewMainVBox.getChildren().remove(center.concertListUser);
             center.loggedInViewMainVBox.getChildren().add(center.concertListUser);
-            for(int i=0; i<controller.getActiveUser().getConcerts().size(); i++) {
+/*            for(int i=0; i<controller.getActiveUser().getConcerts().size(); i++) {
                 System.out.println(controller.getActiveUser().getConcerts().get(i).getArtist());
-            }
+            }*/
             listAvailableConcertsUser();
             handleBuyButton();
         });
@@ -845,12 +863,15 @@ public class Gui {
     }
 
     private void listAvailableConcertsUser() {
-        int numOfConcerts = controller.getConcertDTOS().size();
+        List<ConcertDTO> concerts = controller.getConcertDTOS();
+        int numOfConcerts = concerts.size();
         center.buys = new ArrayList<>();
         clearList();
         addListHeaders();
         center.prices = new Label[numOfConcerts];
+
         for(int i=0; i<numOfConcerts; i++) {
+            ConcertDTO concert = concerts.get(i);
 
             Label artist = new Label();
             Label arena = new Label();
@@ -859,11 +880,17 @@ public class Gui {
             Label price = new Label();
             Button buy = new Button("Buy");
 
-            artist.setText(controller.getConcertDTOS().get(i).getArtist());
+            artist.setText(concert.getArtist());
+            arena.setText(concert.getArena().getName());
+            ageLimit.setText(String.valueOf(concert.getAgeLimit()));
+            date.setText(String.valueOf(concert.getDate()));
+            price.setText(String.valueOf(concert.getPrice()));
+
+           /* artist.setText(controller.getConcertDTOS().get(i).getArtist());
             arena.setText(controller.getConcertDTOS().get(i).getArena().getName());
             ageLimit.setText(String.valueOf(controller.getConcertDTOS().get(i).getAgeLimit()));
             date.setText(String.valueOf(controller.getConcertDTOS().get(i).getDate()));
-            price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));
+            price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));*/
 
             center.concertListUser.add(artist, 0, i + 1, 1, 1);
             center.concertListUser.add(arena, 1, i + 1, 1, 1);
@@ -872,8 +899,8 @@ public class Gui {
             center.concertListUser.add(price, 4, i + 1, 1, 1);
 
             try {
-                for(int j=0; j<controller.getActiveUser().getConcerts().size(); j++) {
-                    if(controller.getActiveUser().getConcerts().get(j).getArtist().equals(artist.getText())) {
+                for(int j=0; j<concerts.size(); j++) {
+                    if(concerts.equals(artist.getText())) {
                         buy.setText("Bought");
                         buy.setDisable(true);
                     }
@@ -892,9 +919,12 @@ public class Gui {
 
     private void listUserBoughtConcerts() {
         try {
-            int numOfConcerts = controller.getActiveUser().getConcerts().size();
+            List<ConcertDTO> userConcerts = controller.getActiveUser().getConcerts();
+
+            int numOfConcerts = userConcerts.size();
             clearList();
             for(int i=0; i<numOfConcerts; i++) {
+                ConcertDTO concert = userConcerts.get(i);
 
                 Label artist = new Label();
                 Label arena = new Label();
@@ -902,11 +932,11 @@ public class Gui {
                 Label date = new Label();
                 Label price = new Label();
 
-                artist.setText(controller.getActiveUser().getConcerts().get(i).getArtist());
-                arena.setText(controller.getActiveUser().getConcerts().get(i).getArena().getName());
-                ageLimit.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getAgeLimit()));
-                date.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getDate()));
-                price.setText(String.valueOf(controller.getActiveUser().getConcerts().get(i).getPrice()));
+                artist.setText(concert.getArtist());
+                arena.setText(concert.getArena().getName());
+                ageLimit.setText(String.valueOf(concert.getAgeLimit()));
+                date.setText(String.valueOf(concert.getDate()));
+                price.setText(String.valueOf(concert.getPrice()));
 
                 center.concertListUser.add(artist, 0, i + 1, 1, 1);
                 center.concertListUser.add(arena, 1, i + 1, 1, 1);
@@ -919,11 +949,29 @@ public class Gui {
         }
 
     }
+
     private void listConcertsAdmin() {
-        int numOfConcerts = controller.getConcertDTOS().size();
+        //TODO Flytta cancel knappen längst till höger
+        List<ConcertDTO> adminConcerts = controller.getConcertDTOS();
+        int numOfConcerts = adminConcerts.size();
         center.cancels = new ArrayList();
         for(int i=0; i<numOfConcerts; i++) {
+            ConcertDTO concert = adminConcerts.get(i);
+
             Label artist = new Label();
+            Label arena = new Label();
+            Label ageLimit = new Label();
+            Label date = new Label();
+            Label price = new Label();
+            Button cancel = new Button("Cancel");
+
+            artist.setText(concert.getArtist());
+            arena.setText(concert.getArena().getName());
+            ageLimit.setText(String.valueOf(concert.getAgeLimit()));
+            date.setText(String.valueOf(concert.getDate()));
+            price.setText(String.valueOf(concert.getPrice()));
+
+/*            Label artist = new Label();
             Label arena = new Label();
             Label ageLimit = new Label();
             Label date = new Label();
@@ -934,7 +982,7 @@ public class Gui {
             arena.setText(controller.getConcertDTOS().get(i).getArena().getName());
             ageLimit.setText(String.valueOf(controller.getConcertDTOS().get(i).getAgeLimit()));
             date.setText(String.valueOf(controller.getConcertDTOS().get(i).getDate()));
-            price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));
+            price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));*/
 
             center.concertListAdmin.add(cancel,0,i+1,1,1);
             center.concertListAdmin.add(artist, 1, i+1, 1, 1);
@@ -967,9 +1015,12 @@ public class Gui {
         if(center.arenas!=null){
             center.arenas.clear();
         }
+
+        List<ArenaDTO> arenas = controller.getArenaDTOS();
+
         center.arenas = center.arenasChoiceBox.getItems();
-        for(int i=0; i<controller.getArenaDTOS().size(); i++) {
-            center.arenas.add(controller.getArenaDTOS().get(i).getName());
+        for(int i=0; i<arenas.size(); i++) {
+            center.arenas.add(arenas.get(i).getName());
         }
     }
 }
