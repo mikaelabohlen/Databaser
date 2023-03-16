@@ -8,6 +8,7 @@ import org.example.entities.Address;
 import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
+import org.example.enums.Setting;
 import org.example.gui.guidto.AdressDTO;
 import org.example.gui.guidto.UserDTO;
 
@@ -123,12 +124,19 @@ public class Controller {
         }
     }
 
-    public boolean addNewArena(List<String> addArenaInputs) {
+    public boolean addNewArena(List<String> addArenaInputs, boolean setting) {
         try {
             Arena arena = new Arena();
             Address address= new Address();
 
             arena.setName(addArenaInputs.get(0));
+
+            if(setting) {
+                arena.setSetting(Setting.INSIDE);
+            }
+            else {
+                arena.setSetting(Setting.OUTSIDE);
+            }
 
             address.setStreetName(addArenaInputs.get(1));
             address.setHouseNumber(Integer.parseInt(addArenaInputs.get(2)));

@@ -194,9 +194,10 @@ public class Gui {
 
         //ADMIN ADD ARENAS VIEW
         private GridPane adminAddArenaGridPane;
-        private Label arenaNameLabel, arenaAdressStreetLabel, arenaAdressHouseNumberLabel, arenaAdressZipCodeLabel, arenaAdressCityLabel;
+        private Label arenaNameLabel, arenaAdressStreetLabel, arenaAdressHouseNumberLabel, arenaAdressZipCodeLabel, arenaAdressCityLabel, arenaInsideLabel;
         private TextField arenaNameTextField, arenaAdressStreetTextField, arenaAdressHouseNumberTextField, arenaAdressZipCodeTextField, arenaAdressCityTextField;
         private Button arenaSubmitButton;
+        private CheckBox arenaInsideCheckBox;
 
         //ADMIN ADD CONCERT VIEW
         private GridPane adminAddConcertGridPane;
@@ -205,6 +206,7 @@ public class Gui {
         private ChoiceBox<String> arenasChoiceBox;
         private ObservableList<String> arenas;
         private Button concertSubmitButton;
+
 
         //ADMIN CONCERTS VIEW
         private GridPane concertListAdmin;
@@ -349,11 +351,14 @@ public class Gui {
 
             arenaSubmitButton = new Button("Submit");
 
+            arenaInsideCheckBox = new CheckBox();
+
             arenaNameLabel = new Label("Name:");
             arenaAdressStreetLabel = new Label("Street:");
             arenaAdressHouseNumberLabel = new Label("Nr:");
             arenaAdressZipCodeLabel = new Label("ZipCode:");
             arenaAdressCityLabel = new Label("City:");
+            arenaInsideLabel = new Label("Inside:");
 
             arenaNameTextField = new TextField();
             arenaAdressStreetTextField = new TextField();
@@ -371,7 +376,9 @@ public class Gui {
             adminAddArenaGridPane.add(arenaAdressZipCodeTextField,1,3,1,1);
             adminAddArenaGridPane.add(arenaAdressCityLabel,0,4,1,1);
             adminAddArenaGridPane.add(arenaAdressCityTextField, 1,4,1,1);
-            adminAddArenaGridPane.add(arenaSubmitButton,0,5,1,1);
+            adminAddArenaGridPane.add(arenaInsideLabel,0,5,1,1);
+            adminAddArenaGridPane.add(arenaInsideCheckBox, 1,5,1,1);
+            adminAddArenaGridPane.add(arenaSubmitButton,0,6,1,1);
 
             //ADD CONCERT VIEW
             adminAddConcertGridPane = new GridPane();
@@ -386,6 +393,7 @@ public class Gui {
             concertPriceLabel = new Label("Price:");
             concertAgeLimitLabel = new Label("Age Limit:");
             concertArenaLabel = new Label("Arena:");
+
 
             concertArtistTextField = new TextField();
             concertDateTextField = new TextField();
@@ -843,6 +851,8 @@ public class Gui {
     private void handleAddArenaSubmitButton() {
         center.arenaSubmitButton.setOnMouseClicked(event-> {
             boolean arenaAdded;
+            boolean inside = false;
+
             List<String> addArenaInputs = new ArrayList<>();
             addArenaInputs.add(center.arenaNameTextField.getText());
             addArenaInputs.add(center.arenaAdressStreetTextField.getText());
@@ -850,7 +860,11 @@ public class Gui {
             addArenaInputs.add(center.arenaAdressZipCodeTextField.getText().replace(" ", ""));
             addArenaInputs.add(center.arenaAdressCityTextField.getText());
 
-            arenaAdded = controller.addNewArena(addArenaInputs);
+            if(center.arenaInsideCheckBox.isSelected()) {
+                inside = true;
+            }
+
+            arenaAdded = controller.addNewArena(addArenaInputs, inside);
 
             if(arenaAdded) {
 
