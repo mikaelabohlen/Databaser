@@ -8,6 +8,8 @@ import org.example.entities.Address;
 import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
+import org.example.gui.guidto.AdressDTO;
+import org.example.gui.guidto.UserDTO;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -72,6 +74,14 @@ public class Controller {
         this.mockManager = mockManager;
     }
 
+    public Customer getCurrentCustomer() {
+        return currentCustomer;
+    }
+
+    public void setCurrentCustomer(Customer currentCustomer) {
+        this.currentCustomer = currentCustomer;
+    }
+
     public void setUpMockData(){
         mockManager.createMockAddress();
         mockManager.createMockArenas();
@@ -122,6 +132,38 @@ public class Controller {
             return false;
         }
     }
+    public boolean registerNewUser(List<String> addRegisterInputs) {
+        try {
+            Customer customer = new Customer();
+            Address address = new Address();
+
+            customer.setFirstName(addRegisterInputs.get(0));
+            customer.setLastName(addRegisterInputs.get(1));
+            customer.setBirthdate(LocalDate.parse(addRegisterInputs.get(2)));
+            customer.setPhoneNumber(addRegisterInputs.get(3));
+            customer.setPassword(validatePassword(addRegisterInputs.get(4), addRegisterInputs.get(5)));
+
+            address.setStreetName(addRegisterInputs.get(6));
+            address.setHouseNumber(Integer.parseInt(addRegisterInputs.get(7)));
+            address.setZipCode(Integer.parseInt(addRegisterInputs.get(8)));
+            address.setCity(addRegisterInputs.get(9));
+
+            addressDAO.createAddress(address);
+            customer.setAddress(address);
+            customerDAO.createCustomer(customer);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    private String validatePassword(String password, String confirmPassword) {
+        if(password.equals(confirmPassword)) {
+            return password;
+        }
+        else {
+            return null;
+        }
+    }
     public boolean validateLogin(String userName, String password) {
         customerList = customerDAO.getAllCustomers();
         for (Customer customer : customerList) {
@@ -129,6 +171,7 @@ public class Controller {
                 continue;
             }
             if (customer.getFirstName().equals(userName) && customer.getPassword().equals(password)) {
+                currentCustomer = customer;
                 return true;
             }
         }
@@ -143,6 +186,18 @@ public class Controller {
             if (customer.getFirstName().equals(userName) && customer.getPassword().equals(password)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean addConcertsToCustomer(int id){
+        Concert concert = concertDAO.getConcertById(id);
+
+        if(checkAgeLimit(currentCustomer, concert)){
+            currentCustomer.getConcerts().add(concert);
+            customerDAO.updateCustomer(currentCustomer);
+            currentCustomer = customerDAO.getCustomerById(currentCustomer.getId());
+            return true;
         }
         return false;
     }
@@ -164,12 +219,10 @@ public class Controller {
         }
     }
 
-    public boolean checkAgeLimit(int id) {
-        Customer customer = customerDAO.getCustomerById(id);
+    public boolean checkAgeLimit(Customer customer, Concert concert) {
         LocalDate now = LocalDate.now();
         long years = ChronoUnit.YEARS.between(customer.getBirthdate(), now);
         System.out.println(years);
-        Concert concert = concertDAO.getConcertById(id);
 
         return concert.getAgeLimit() <= years;
     }
@@ -189,8 +242,6 @@ public class Controller {
 
     public void deleteConcert(int index) {
         Concert concert = concertDAO.getAllConcerts().get(index);
-//        concert.getCustomers().clear();
-//        concertDAO.updateConcert(concert);
         concertDAO.deleteConcert(concert.getId());
     }
 

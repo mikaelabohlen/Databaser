@@ -15,11 +15,15 @@ import org.hibernate.cfg.Configuration;
 
 public class Main extends Application {
     private Gui gui;
-    private GuiController controller;
+    private Controller controller;
 
     @Override
     public void start(Stage primaryStage) {
-        controller = new GuiController();
+        controller = new Controller();
+        MockManager mockManager = new MockManager(controller);
+        controller.setMockManager(mockManager);
+        controller.setUpMockData();
+
         gui = new Gui(primaryStage, controller);
         gui.setupGui();
     }
