@@ -32,16 +32,16 @@ public class ArenaDAO {
 
         return arena;
     }
-    public List<Arena> getArenaByName (String name) {
+    public Arena getArenaByName (String name) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Query query = session.createQuery("FROM Arena WHERE name = :name");
         query.setParameter("name", name);
-        List<Arena> arenas = query.list();
+        Arena arena = (Arena) query.uniqueResult();
         session.getTransaction().commit();
         session.close();
 
-        return arenas;
+        return arena;
     }
 
     public List<Arena> getAllArenas() {

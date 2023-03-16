@@ -16,9 +16,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class Controller {
-    List<Concert> concertList;
-    List<Customer> customerList;
-    List<Arena> arenaList;
+    private List<Concert> concertList;
+    private List<Customer> customerList;
+    private List<Arena> arenaList;
 
     private Customer currentCustomer;
     private AddressDAO addressDAO;
@@ -83,11 +83,22 @@ public class Controller {
     }
 
     public void setUpMockData(){
-        mockManager.createMockAddress();
-        mockManager.createMockArenas();
-        mockManager.createMockCustomers();
-        mockManager.createMockConcerts();
-        mockManager.createMockLinks();
+        if(addressDAO.getAllAddresses().size()<1) {
+            mockManager.createMockAddress();
+        }
+
+        if(customerDAO.getAllCustomers().size()<1) {
+            mockManager.createMockCustomers();
+        }
+
+        if(arenaDAO.getAllArenas().size()<1) {
+            mockManager.createMockArenas();
+        }
+
+        if(concertDAO.getAllConcerts().size()<1) {
+            mockManager.createMockConcerts();
+            mockManager.createMockLinks();
+        }
     }
 
     public boolean addNewConcert(List<String> addConcertInputs){
@@ -111,6 +122,7 @@ public class Controller {
             return false;
         }
     }
+
     public boolean addNewArena(List<String> addArenaInputs) {
         try {
             Arena arena = new Arena();
@@ -132,6 +144,7 @@ public class Controller {
             return false;
         }
     }
+
     public boolean registerNewUser(List<String> addRegisterInputs) {
         try {
             Customer customer = new Customer();
@@ -156,6 +169,7 @@ public class Controller {
             return false;
         }
     }
+
     private String validatePassword(String password, String confirmPassword) {
         if(password.equals(confirmPassword)) {
             return password;
@@ -164,6 +178,7 @@ public class Controller {
             return null;
         }
     }
+
     public boolean validateLogin(String userName, String password) {
         customerList = customerDAO.getAllCustomers();
         for (Customer customer : customerList) {
@@ -177,6 +192,7 @@ public class Controller {
         }
         return false;
     }
+
     public boolean validateLoginAdmin(String userName, String password) {
         customerList = customerDAO.getAllCustomers();
         for (Customer customer : customerList) {
@@ -201,6 +217,7 @@ public class Controller {
         }
         return false;
     }
+
     public void listCustomersForAllConcerts() {
         concertList = concertDAO.getAllConcerts();
         for (Concert concert: concertList) {
@@ -227,33 +244,8 @@ public class Controller {
         return concert.getAgeLimit() <= years;
     }
 
-    public void buyTicket() {
-
-    }
-
-//    public Arena setArenaValue(String value) {
-//        for(int i=0; i<getArenaDAO().getAllArenas().size(); i++) {
-//            if(getArenaDAO().getAllArenas().get(i).getName().equals(value)) {
-//                return  getArenaDAO().getAllArenas().get(i);
-//            }
-//        }
-//        return null;
-//    }
-
     public void deleteConcert(int index) {
         Concert concert = concertDAO.getAllConcerts().get(index);
         concertDAO.deleteConcert(concert.getId());
     }
-
-//
-//    public void linkCustomersConcerts(Customer customer, List<Concert> concerts) { //buyTicket eller dylikt
-//        customer.setConcerts(concerts);
-//        session.update(customer);
-//
-////        for(Concert concert: customer.getConcerts()){
-////            session.update(concert);
-////        }
-//
-//        // behöver man loopa igenom alla concerts och update them to? eller gör hibernate det?
-//    }
 }
