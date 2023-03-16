@@ -6,14 +6,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.Controller;
 import org.example.entities.Arena;
 import org.example.entities.Concert;
-
+import org.example.entities.Customer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Gui {
@@ -21,7 +25,7 @@ public class Gui {
     //CONDITION VARIABLES
     private final Stage primaryStage;
 
-//    private final GuiController controller;
+    //    private final GuiController controller;
     private Controller controller;
     private boolean loggedIn, loggedInAdmin;
 
@@ -34,6 +38,7 @@ public class Gui {
     private Center center;
     private Bottom bottom;
     private Register register;
+    private CustomerList customerList;
 
     //COMMON GUI CONFIGS
     private final int STANDARD_BUTTON_WIDTH = 100;
@@ -58,10 +63,10 @@ public class Gui {
         private HBox navBarHBox;
 
         //LOGGED IN NAV-BAR
-        private Button buyTicketsButton, boughtTicketsButton;
+        private Button buyTicketsButton, boughtTicketsButton, userInfoButton;
 
         //ADMIN LOGGED IN NAV-BAR
-        private Button addConcertButton, deleteConcertButton, updateConcertButton, addArenasButton;
+        private Button addConcertButton, concertsButton, updateConcertButton, addArenasButton, deleteArenasButton;
 
         public void setupTop() {
             //TOP MAIN
@@ -130,14 +135,18 @@ public class Gui {
             boughtTicketsButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
             boughtTicketsButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
 
+            userInfoButton = new Button("User Info");
+            userInfoButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
+            userInfoButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+
             //ADMIN LOGGED IN NAV-BAR
             addConcertButton = new Button("Add Concert");
             addConcertButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
             addConcertButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
 
-            deleteConcertButton = new Button("Delete Concert");
-            deleteConcertButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
-            deleteConcertButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            concertsButton = new Button("Concerts");
+            concertsButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
+            concertsButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
 
             updateConcertButton = new Button("Update Concert");
             updateConcertButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
@@ -146,6 +155,10 @@ public class Gui {
             addArenasButton = new Button("Add Arenas");
             addArenasButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
             addArenasButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+
+            deleteArenasButton = new Button("Delete Arenas");
+            deleteArenasButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
+            deleteArenasButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
 
         }
     }
@@ -171,6 +184,14 @@ public class Gui {
         private Label[] prices;
         private ArrayList<Button> buys;
 
+        //USER USER INFO VIEW
+        private GridPane userInfoGridPane;
+        private Label userFirstnameLabel, userLastnameLabel, userBirthdateLabel, userPhoneLabel;
+        private Label userStreetNameLabel, userHouseNumberLabel, userZipcodeLabel, userCityLabel;
+        private TextField userFirstnameTextField, userLastnameTextField, userBirthdateTextField, userPhoneTextField;
+        private TextField userStreetTextField, userHouseNumberTextField, userZipcodeTextField, userCityTextField;
+        private Button userUpdateButton, userRemoveAccountButton;
+
         //ADMIN ADD ARENAS VIEW
         private GridPane adminAddArenaGridPane;
         private Label arenaNameLabel, arenaAdressStreetLabel, arenaAdressHouseNumberLabel, arenaAdressZipCodeLabel, arenaAdressCityLabel;
@@ -185,9 +206,22 @@ public class Gui {
         private ObservableList<String> arenas;
         private Button concertSubmitButton;
 
-        //ADMIN DELETE CONCERT VIEW
+        //ADMIN CONCERTS VIEW
         private GridPane concertListAdmin;
         private ArrayList<Button>cancels;
+        private ArrayList<Button>customerLists;
+
+        //ADMIN UPDATE CONCERT VIEW
+        private ChoiceBox<String> concertChoiceBox;
+        private ObservableList<String> concerts;
+        private GridPane updateGridPane;
+        private TextField updateArtistTextField, updateDateTextField, updatePriceTextField, updateAgelimitTextField;
+        private Label updateArtistLabel, updateDateLabel, updatePriceLabel, updateAgelimitLabel, updateArenaLabel;
+        private Button updateSubmitButton;
+
+        //ADMIN DELETE ARENA VIEW
+        private VBox deleteArenaVBox;
+        private Button deleteArenaDeleteButton;
 
         public void setupCenter() {
 
@@ -229,6 +263,74 @@ public class Gui {
             concertListUser.setPadding(new Insets(10,10,10,10));
             concertListUser.setVgap(10);
             concertListUser.setHgap(10);
+
+            //USER USERINFO
+            userInfoGridPane = new GridPane();
+            userInfoGridPane.setPadding(new Insets(10,10,10,10));
+            userInfoGridPane.setHgap(10);
+            userInfoGridPane.setVgap(10);
+
+            userFirstnameLabel = new Label("Firstname:");
+            userLastnameLabel = new Label ("Lastname:");
+            userBirthdateLabel = new Label("Birthdate");
+            userPhoneLabel = new Label("Phone:");
+            userStreetNameLabel = new Label("Street:");
+            userHouseNumberLabel = new Label("Housenumber:");
+            userZipcodeLabel = new Label("Zipcode:");
+            userCityLabel = new Label("City:");
+
+            userFirstnameTextField = new TextField();
+            userFirstnameTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userLastnameTextField = new TextField();
+            userLastnameTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userBirthdateTextField = new TextField();
+            userBirthdateTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userPhoneTextField = new TextField();
+            userPhoneTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userStreetTextField = new TextField();
+            userStreetTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userHouseNumberTextField = new TextField();
+            userHouseNumberTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userZipcodeTextField = new TextField();
+            userZipcodeTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userCityTextField = new TextField();
+            userCityTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            userUpdateButton = new Button("Update");
+            userUpdateButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            userUpdateButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
+
+            userRemoveAccountButton = new Button("Remove Account");
+            userRemoveAccountButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            userRemoveAccountButton.setPrefWidth(120);
+
+            userInfoGridPane.add(userFirstnameLabel,0,0,1,1);
+            userInfoGridPane.add(userFirstnameTextField,1,0,1,1);
+            userInfoGridPane.add(userLastnameLabel, 0,1,1,1);
+            userInfoGridPane.add(userLastnameTextField,1,1,1,1);
+            userInfoGridPane.add(userBirthdateLabel, 0,2,1,1);
+            userInfoGridPane.add(userBirthdateTextField, 1,2,1,1);
+            userBirthdateTextField.setDisable(true);
+            userInfoGridPane.add(userPhoneLabel,0,3,1,1);
+            userInfoGridPane.add(userPhoneTextField,1,3,1,1);
+            userInfoGridPane.add(userStreetNameLabel,0,4,1,1);
+            userInfoGridPane.add(userStreetTextField,1,4,1,1);
+            userInfoGridPane.add(userHouseNumberLabel,0,5,1,1);
+            userInfoGridPane.add(userHouseNumberTextField,1,5,1,1);
+            userInfoGridPane.add(userZipcodeLabel,0,6,1,1);
+            userInfoGridPane.add(userZipcodeTextField,1,6,1,1);
+            userInfoGridPane.add(userCityLabel,0,7,1,1);
+            userInfoGridPane.add(userCityTextField,1,7,1,1);
+            userInfoGridPane.add(userUpdateButton,0,8,1,1);
+            userInfoGridPane.add(userRemoveAccountButton,1,8,1,1);
+
 
             //LOGGED IN ADMIN VIEW
             loggedInAdminLabel = new Label();
@@ -311,6 +413,76 @@ public class Gui {
             concertListAdmin.setPadding(new Insets(10,10,10,10));
             concertListAdmin.setVgap(10);
             concertListAdmin.setHgap(10);
+
+            //ADMIN UPDATE CONCERT VIEW
+            updateGridPane = new GridPane();
+            updateGridPane.setAlignment(Pos.CENTER);
+            updateGridPane.setVgap(10);
+            updateGridPane.setHgap(10);
+
+            updateSubmitButton = new Button("Update");
+            updateSubmitButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
+            updateSubmitButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
+
+            updateArtistLabel = new Label("Artist:");
+            updateDateLabel = new Label("Date:");
+            updateAgelimitLabel = new Label("Age Limit:");
+            updatePriceLabel = new Label("Price:");
+            updateArenaLabel = new Label("Arena:");
+
+            updateArtistTextField = new TextField();
+            updateArtistTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            updateDateTextField = new TextField();
+            updateDateTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            updateAgelimitTextField = new TextField();
+            updateAgelimitTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            updatePriceTextField = new TextField();
+            updatePriceTextField.setMaxWidth(STANDARD_BUTTON_WIDTH);
+
+            concertChoiceBox = new ChoiceBox<>();
+            addConcertsToChoiceBox();
+            concertChoiceBox.setOnAction(this::concertsChoiceBoxHandler);
+
+            //ADMIN DELETE ARENAS VIEW
+            deleteArenaVBox = new VBox();
+            deleteArenaVBox.setAlignment(Pos.CENTER);
+            deleteArenaVBox.setSpacing(10);
+            deleteArenaVBox.setPadding(new Insets(10,10,10,10));
+            deleteArenaDeleteButton = new Button("Delete");
+        }
+
+        private void concertsChoiceBoxHandler(ActionEvent actionEvent) {
+            String concertInput = concertChoiceBox.getValue(); //TODO Stringbuilder
+            Concert concert = controller.getConcertDAO().getConcertByArtist(concertInput);
+
+            if(updateGridPane !=null) {
+                updateGridPane.getChildren().clear();
+            }
+            try {
+                updateArtistTextField.setText(concert.getArtist());
+                updateDateTextField.setText(String.valueOf(concert.getDate()));
+                updateAgelimitTextField.setText(String.valueOf(concert.getAgeLimit()));
+                updatePriceTextField.setText(String.valueOf(concert.getPrice()));
+                arenasChoiceBox.setValue(concert.getArena().getName());
+
+                updateGridPane.add(updateArtistLabel,0,0,1,1);
+                updateGridPane.add(updateArtistTextField,1,0,1,1);
+                updateGridPane.add(updateDateLabel,0,1,1,1);
+                updateGridPane.add(updateDateTextField,1,1,1,1);
+                updateGridPane.add(updateAgelimitLabel,0,2,1,1);
+                updateGridPane.add(updateAgelimitTextField,1,2,1,1);
+                updateGridPane.add(updatePriceLabel,0,3,1,1);
+                updateGridPane.add(updatePriceTextField,1,3,1,1);
+                updateGridPane.add(updateArenaLabel,0,4,1,1);
+                updateGridPane.add(arenasChoiceBox,1,4,1,1);
+                updateGridPane.add(updateSubmitButton, 0,5,1,1);
+
+            } catch (NullPointerException ignored) {
+
+            }
 
         }
 
@@ -404,7 +576,7 @@ public class Gui {
         public void setupRegister() {
             registerStage = new Stage();
             registerPane = new BorderPane();
-            registerScene = new Scene(registerPane, 230, 400);
+            registerScene = new Scene(registerPane, 230, 475);
             registerStage.setScene(registerScene);
 
             registerMainGrid = new GridPane();
@@ -505,13 +677,53 @@ public class Gui {
             registerPane.setCenter(registerMainGrid);
         }
     }
+
+    private class CustomerList {
+        private Stage customerListStage;
+        private BorderPane customerListPane;
+        private Scene customerListScene;
+
+        private Label customerListHeaderLabel;
+
+        private GridPane customerListGridPane;
+        private HBox customerListTopHBox;
+
+        public void setupCustomerList() {
+            customerListStage = new Stage();
+            customerListPane = new BorderPane();
+            customerListScene = new Scene(customerListPane, 350, 600);
+            customerListStage.setTitle("CustomerList");
+            customerListStage.setScene(customerListScene);
+
+
+
+            customerListGridPane = new GridPane();
+            customerListGridPane.setAlignment(Pos.TOP_CENTER);
+            customerListGridPane.setVgap(10);
+            customerListGridPane.setHgap(10);
+
+            customerListHeaderLabel = new Label("Customer List");
+            customerListHeaderLabel.setStyle("-fx-font-size: 25");
+            customerListHeaderLabel.setAlignment(Pos.CENTER);
+
+            customerListTopHBox = new HBox();
+            customerListTopHBox.setAlignment(Pos.CENTER);
+            customerListTopHBox.setPadding(new Insets(10,10,10,10));
+            customerListTopHBox.setSpacing(10);
+            customerListTopHBox.getChildren().add(customerListHeaderLabel);
+
+            customerListPane.setTop(customerListTopHBox);
+            customerListPane.setCenter(customerListGridPane);
+        }
+    }
+
     public void setupGui() {
         try {
             top = new Top();
             center = new Center();
             bottom = new Bottom();
             register = new Register();
-
+            customerList = new CustomerList();
 
             //MAIN VIEW
             mainPane = new BorderPane();
@@ -522,6 +734,7 @@ public class Gui {
             center.setupCenter();
             bottom.setupBottom();
             register.setupRegister();
+            customerList.setupCustomerList();
 
             //INITIATE MAIN VIEW
             center.startView();
@@ -548,14 +761,20 @@ public class Gui {
         //LOGGED IN VIEW
         handleBuyTicketsButton();
         handleBoughtTicketsButton();
+        handleUserInfoButton();
+        handleUserInfoUpdateButton();
+        handleUserInfoRemoveAccountButton();
 
         //ADMIN VIEW
         handleAddArenaButton();
         handleAddArenaSubmitButton();
+        handleDeleteArenaButton();
+        handleDeleteArenaSubmitButton();
         handleAddConcertButton();
         handleAddConcertSubmitButton();
-        handleDeleteConcertButton();
-
+        handleUpdateConcertButton();
+        handleUpdateConcertSubmitButton();
+        handleConcertsButton();
 
         //REGISTER
         handleRegisterCancelButton();
@@ -572,25 +791,53 @@ public class Gui {
         });
     }
 
+    private void handleDeleteArenaButton() {
+        top.deleteArenasButton.setOnMouseClicked(event-> {
+            center.loggedinAdminViewVBox.getChildren().clear();
+            center.loggedInAdminLabel.setText("Delete Arena");
+            center.deleteArenaVBox.getChildren().clear();
+            center.deleteArenaVBox.getChildren().addAll(center.arenasChoiceBox, center.deleteArenaDeleteButton);
+            center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.deleteArenaVBox);
+        });
+    }
+
     private void handleAddConcertButton() {
         top.addConcertButton.setOnMouseClicked(event-> {
             center.loggedinAdminViewVBox.getChildren().clear();
             center.loggedInAdminLabel.setText("Add Concert");
+
+            try {
+                center.adminAddConcertGridPane.add(center.arenasChoiceBox,1,4,1,1);
+            } catch (IllegalArgumentException ignored) {
+
+            }
+
             center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.adminAddConcertGridPane);
         });
     }
 
-    private void handleDeleteConcertButton() {
-        top.deleteConcertButton.setOnMouseClicked(event-> {
+    private void handleConcertsButton() {
+        top.concertsButton.setOnMouseClicked(event-> {
             clearConcertsAdmin();
             listConcertsAdmin();
             center.loggedinAdminViewVBox.getChildren().clear();
-            center.loggedInAdminLabel.setText("Delete Concert");
+            center.loggedInAdminLabel.setText("Concerts");
             center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.concertListAdmin);
 
             handleCancelButtons();
+            handleCustomerListButtons();
         });
 
+    }
+
+    private void handleUpdateConcertButton() {
+        top.updateConcertButton.setOnMouseClicked(event-> {
+            center.loggedinAdminViewVBox.getChildren().clear();
+            center.loggedInAdminLabel.setText("Update Concert");
+            center.updateGridPane.getChildren().clear();
+            center.concertChoiceBox.setValue(null);
+            center.loggedinAdminViewVBox.getChildren().addAll(center.loggedInAdminLabel, center.concertChoiceBox, center.updateGridPane);
+        });
     }
 
     private void handleAddArenaSubmitButton() {
@@ -655,6 +902,7 @@ public class Gui {
                 center.concertArtistTextField.clear();
                 center.concertPriceTextField.clear();
                 center.concertAgeLimitTextField.clear();
+                addConcertsToChoiceBox();
             }
 
             else {
@@ -668,6 +916,28 @@ public class Gui {
 
     }
 
+    private void handleUpdateConcertSubmitButton() {
+        center.updateSubmitButton.setOnMouseClicked(event-> {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Are you sure you want to update this concert?");
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == yesButton) {
+                //TODO FIXA KNAPPN
+                center.updateArtistTextField.getText();
+                center.updateDateTextField.getText();
+                center.updateAgelimitTextField.getText();
+                center.updatePriceTextField.getText();
+            }
+        });
+    }
+
     private void handleCancelButtons() {
         List<Concert> concerts = controller.getConcertDAO().getAllConcerts();
         for (int i = 0; i <center.cancels.size(); i++) {
@@ -676,12 +946,66 @@ public class Gui {
                 center.cancels.get(index).setText("Canceled");
                 center.cancels.get(index).setDisable(true);
                 center.cancels.remove(index);
+                center.customerLists.get(index).setDisable(true);
+                center.customerLists.remove(index);
                 System.out.println(index);
                 System.out.println(concerts.get(index).getArtist());
                 controller.deleteConcert(index); // Ropa på delete concert metod
                 handleCancelButtons();
+                /*handleCustomerListButtons();*/
+                addConcertsToChoiceBox();
             });
         }
+    }
+
+    private void handleCustomerListButtons() {
+        List<Concert> concerts = controller.getConcertDAO().getAllConcerts();
+        for (int i = 0; i <center.customerLists.size(); i++) {
+            int index = i;
+            center.customerLists.get(i).setOnMouseClicked(event -> {
+                concerts.get(index).getCustomers();
+                customerList.customerListGridPane.getChildren().clear();
+                customerList.customerListHeaderLabel.setText(concerts.get(index).getArtist() + " " + concerts.get(index).getDate());
+                for(int j=0; j<concerts.get(index).getCustomers().size(); j++) {
+                    Label firstname = new Label();
+                    Label lastname = new Label();
+                    Label birthDate = new Label();
+                    Label phone = new Label();
+
+                    firstname.setText(concerts.get(index).getCustomers().get(j).getFirstName());
+                    customerList.customerListGridPane.add(firstname, 0, j,1,1);
+                    lastname.setText(concerts.get(index).getCustomers().get(j).getLastName());
+                    customerList.customerListGridPane.add(lastname, 1, j,1,1);
+                    birthDate.setText(String.valueOf(concerts.get(index).getCustomers().get(j).getBirthdate()));
+                    customerList.customerListGridPane.add(birthDate, 2, j,1,1);
+                    phone.setText(concerts.get(index).getCustomers().get(j).getPhoneNumber());
+                    customerList.customerListGridPane.add(phone, 3, j,1,1);
+                }
+                customerList.customerListStage.show();
+            });
+        }
+    }
+
+    private void handleDeleteArenaSubmitButton() {
+        center.deleteArenaDeleteButton.setOnMouseClicked(event-> {
+            //TODO problem med FK koppling THEArena
+            Arena arena = controller.getArenaDAO().getArenaByName(center.arenasChoiceBox.getValue());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Are you sure you want to delete " + arena.getName() + "?");
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.get() == yesButton) {
+
+                controller.getArenaDAO().deleteArena(arena.getId());
+                addArenasToChoiceBox();
+            }
+        });
     }
 
     //REGISTER BUTTONS
@@ -770,8 +1094,8 @@ public class Gui {
             center.headerLabel.setText("Bought Tickets");
             center.loggedInViewHeaderHBox.getChildren().clear();
             center.loggedInViewHeaderHBox.getChildren().add(center.headerLabel);
-            center.loggedInViewMainVBox.getChildren().remove(center.concertListUser);
-            center.loggedInViewMainVBox.getChildren().add(center.concertListUser);
+            center.loggedInViewMainVBox.getChildren().clear();
+            center.loggedInViewMainVBox.getChildren().addAll(center.loggedInViewHeaderHBox, center.concertListUser);
             listUserBoughtConcerts();
         });
     }
@@ -782,13 +1106,81 @@ public class Gui {
             center.loggedInViewHeaderHBox.getChildren().addAll(center.headerLabel, center.currencyChoiceBox);
             center.currencyChoiceBox.setValue("Swedish Krona Sek");
             center.headerLabel.setText("Buy Tickets");
-            center.loggedInViewMainVBox.getChildren().remove(center.concertListUser);
-            center.loggedInViewMainVBox.getChildren().add(center.concertListUser);
+            center.loggedInViewMainVBox.getChildren().clear();
+            center.loggedInViewMainVBox.getChildren().addAll(center.loggedInViewHeaderHBox, center.concertListUser);
 /*            for(int i=0; i<controller.getActiveUser().getConcerts().size(); i++) {
                 System.out.println(controller.getActiveUser().getConcerts().get(i).getArtist());
             }*/
             listAvailableConcertsUser();
             handleBuyButton();
+        });
+    }
+
+    private void handleUserInfoButton() {
+        top.userInfoButton.setOnMouseClicked(event-> {
+            center.loggedInViewHeaderHBox.getChildren().clear();
+            center.loggedInViewHeaderHBox.getChildren().add(center.headerLabel);
+            center.headerLabel.setText("User information");
+            center.loggedInViewMainVBox.getChildren().clear();
+            center.loggedInViewMainVBox.getChildren().addAll(center.loggedInViewHeaderHBox,center.userInfoGridPane);
+            getUserInfoFilled();
+        });
+    }
+
+    private void handleUserInfoUpdateButton() {
+        center.userUpdateButton.setOnMouseClicked(event-> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Are you sure you want to update your info?");
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() ==  yesButton) {
+                //TODO fixa uppdatering för användarinfo
+                center.userFirstnameTextField.getText();
+                center.userLastnameTextField.getText();
+                center.userBirthdateTextField.getText();
+                center.userPhoneTextField.getText();
+                center.userStreetTextField.getText();
+                center.userHouseNumberTextField.getText();
+            }
+        });
+    }
+
+    private void handleUserInfoRemoveAccountButton() {
+        center.userRemoveAccountButton.setOnMouseClicked(event-> {
+            //TODO Tror detta är klart och funkar som det ska
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Are you sure you want to delete your account?");
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() ==  yesButton) {
+                controller.getCustomerDAO().deleteCustomer(controller.getCurrentCustomer().getId());
+                controller.setCurrentCustomer(null);
+                loggedIn = false;
+                loggedInAdmin = false;
+                top.registerButton.setDisable(false);
+                top.usernameTextField.setDisable(false);
+                top.usernameTextField.clear();
+                top.passwordPasswordField.setDisable(false);
+                top.passwordPasswordField.clear();
+                top.adminCheckBox.setDisable(false);
+                top.adminCheckBox.setSelected(false);
+                top.startViewGridPane.getChildren().remove(top.logoutButton);
+                top.startViewGridPane.add(top.loginButton,0,2,1,1);
+                top.navBarHBox.getChildren().clear();
+
+                center.startView();
+            }
+
         });
     }
 
@@ -805,9 +1197,10 @@ public class Gui {
                     disableLoginNodes();
                     top.navBarHBox.getChildren().clear();
                     top.navBarHBox.getChildren().add(top.addConcertButton);
-                    top.navBarHBox.getChildren().add(top.deleteConcertButton);
                     top.navBarHBox.getChildren().add(top.updateConcertButton);
+                    top.navBarHBox.getChildren().add(top.concertsButton);
                     top.navBarHBox.getChildren().add(top.addArenasButton);
+                    top.navBarHBox.getChildren().add(top.deleteArenasButton);
 
                     System.out.println("Logged in Admin!");
                 }
@@ -826,6 +1219,7 @@ public class Gui {
                     top.navBarHBox.getChildren().clear();
                     top.navBarHBox.getChildren().add(top.buyTicketsButton);
                     top.navBarHBox.getChildren().add(top.boughtTicketsButton);
+                    top.navBarHBox.getChildren().add(top.userInfoButton);
                     System.out.println("Logged in user!");
                 }
                 else {
@@ -973,9 +1367,9 @@ public class Gui {
     }
 
     private void listConcertsAdmin() {
-        //TODO Flytta cancel knappen längst till höger
         List<Concert> adminConcerts = controller.getConcertDAO().getAllConcerts();
         int numOfConcerts = adminConcerts.size();
+        center.customerLists = new ArrayList<>();
         center.cancels = new ArrayList();
         for(int i=0; i<numOfConcerts; i++) {
             Concert concert = adminConcerts.get(i);
@@ -986,6 +1380,7 @@ public class Gui {
             Label date = new Label();
             Label price = new Label();
             Button cancel = new Button("Cancel");
+            Button customerList = new Button("Customer List");
 
             artist.setText(concert.getArtist());
             arena.setText(concert.getArena().getName());
@@ -993,27 +1388,16 @@ public class Gui {
             date.setText(String.valueOf(concert.getDate()));
             price.setText(String.valueOf(concert.getPrice()));
 
-/*            Label artist = new Label();
-            Label arena = new Label();
-            Label ageLimit = new Label();
-            Label date = new Label();
-            Label price = new Label();
-            Button cancel = new Button("Cancel");
-
-            artist.setText(controller.getConcertDTOS().get(i).getArtist());
-            arena.setText(controller.getConcertDTOS().get(i).getArena().getName());
-            ageLimit.setText(String.valueOf(controller.getConcertDTOS().get(i).getAgeLimit()));
-            date.setText(String.valueOf(controller.getConcertDTOS().get(i).getDate()));
-            price.setText(String.valueOf(controller.getConcertDTOS().get(i).getPrice()));*/
-
-            center.concertListAdmin.add(cancel,0,i+1,1,1);
-            center.concertListAdmin.add(artist, 1, i+1, 1, 1);
-            center.concertListAdmin.add(arena, 2, i+1, 1, 1);
-            center.concertListAdmin.add(ageLimit, 3, i+1, 1, 1);
-            center.concertListAdmin.add(date, 4, i+1, 1, 1);
-            center.concertListAdmin.add(price, 5,i+1,1,1);
+            center.concertListAdmin.add(artist, 0, i+1, 1, 1);
+            center.concertListAdmin.add(arena, 1, i+1, 1, 1);
+            center.concertListAdmin.add(ageLimit, 2, i+1, 1, 1);
+            center.concertListAdmin.add(date, 3, i+1, 1, 1);
+            center.concertListAdmin.add(price, 4,i+1,1,1);
+            center.concertListAdmin.add(cancel,5,i+1,1,1);
+            center.concertListAdmin.add(customerList,6,i+1,1,1);
 
             center.cancels.add(cancel);
+            center.customerLists.add(customerList);
         }
     }
 
@@ -1044,5 +1428,31 @@ public class Gui {
         for(int i=0; i<arenas.size(); i++) {
             center.arenas.add(arenas.get(i).getName());
         }
+    }
+
+    private void addConcertsToChoiceBox() {
+        if(center.concerts!=null) {
+            center.concerts.clear();
+        }
+
+        List<Concert> concerts = controller.getConcertDAO().getAllConcerts();
+        center.concerts = center.concertChoiceBox.getItems();
+        for(int i=0; i<concerts.size(); i++) {
+            //TODO från todo rad 458 så man kan köra den utkommenterade raden istället för den nedan
+            /*center.concerts.add(concerts.get(i).getArtist() + "/" + concerts.get(i).getDate() + "/" + concerts.get(i).getArena().getName());*/
+            center.concerts.add(concerts.get(i).getArtist());
+        }
+    }
+
+    private void getUserInfoFilled() {
+        Customer customer = controller.getCurrentCustomer();
+        center.userFirstnameTextField.setText(customer.getFirstName());
+        center.userLastnameTextField.setText(customer.getLastName());
+        center.userBirthdateTextField.setText(String.valueOf(customer.getBirthdate()));
+        center.userPhoneTextField.setText(String.valueOf(customer.getPhoneNumber()));
+        center.userStreetTextField.setText(customer.getAddress().getStreetName());
+        center.userHouseNumberTextField.setText(String.valueOf(customer.getAddress().getHouseNumber()));
+        center.userZipcodeTextField.setText(String.valueOf(customer.getAddress().getZipCode()));
+        center.userCityTextField.setText(customer.getAddress().getCity());
     }
 }

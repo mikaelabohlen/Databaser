@@ -31,16 +31,16 @@ public class ConcertDAO {
 
         return concert;
     }
-    public List<Concert> getConcertByArtist (String artist) {
+    public Concert getConcertByArtist (String artist) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Query query = session.createQuery("FROM Concert WHERE artist = :artist");
         query.setParameter("artist", artist);
-        List<Concert> concerts = query.list();
+        Concert concert = (Concert) query.uniqueResult();
         session.getTransaction().commit();
         session.close();
 
-        return concerts;
+        return concert;
     }
 
     public List<Concert> getAllConcerts() {
