@@ -17,7 +17,9 @@ import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
 
+import java.math.RoundingMode;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -467,9 +469,13 @@ public class Gui {
         }
 
         private void concertsChoiceBoxHandler(ActionEvent actionEvent) {
+            if(concertChoiceBox.getValue()==null) {
+                return;
+            }
+
             String[] concertInputStrings = concertChoiceBox.getValue().split("/");
             String concertInput = concertInputStrings[0];
-            System.out.println(concertInput);
+            System.out.println(concertInput + "==============================================");
 //            String concertInput = concertChoiceBox.getValue();
             Concert concert = controller.getConcertDAO().getConcertByArtist(concertInput);
             System.out.println("Artist: " + concert.getArtist());
@@ -505,13 +511,12 @@ public class Gui {
 
         private void currencyChoiceBoxHandler(ActionEvent actionEvent) {
             String currency = currencyChoiceBox.getValue();
-
             if (currency.equals("Dollars $")) {
                 center.priceLabel.setText("Dollars ($)");
                 for (int i = 0; i < center.prices.length; i++) {
                     double value = controller.getConcertDAO().getAllConcerts().get(i).getPrice();
                     value = value * 0.09;
-                    center.prices[i].setText(String.valueOf(value));
+                    center.prices[i].setText(String.format("%.2f", value));
                 }
             }
 
@@ -520,7 +525,7 @@ public class Gui {
                 for (int i = 0; i < center.prices.length; i++) {
                     double value = controller.getConcertDAO().getAllConcerts().get(i).getPrice();
                     value = value * 0.08;
-                    center.prices[i].setText(String.valueOf(value));
+                    center.prices[i].setText(String.format("%.2f", value));
                 }
 
             }
@@ -531,7 +536,7 @@ public class Gui {
                     return;
                 }
                 for (int i = 0; i < center.prices.length; i++) {
-                    center.prices[i].setText(String.valueOf(controller.getConcertDAO().getAllConcerts().get(i).getPrice()));
+                    center.prices[i].setText(String.format("%.2f",controller.getConcertDAO().getAllConcerts().get(i).getPrice()));
                     System.out.println(controller.getConcertDAO().getAllConcerts().get(i).getPrice());
                 }
             }
@@ -557,23 +562,18 @@ public class Gui {
 
     private class Bottom {
         private VBox bottomVBox;
-        private Button exitButton, backButton;
+        private Button exitButton;
 
         public void setupBottom() {
             exitButton = new Button("Exit");
             exitButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
             exitButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
 
-            backButton = new Button("Back");
-            backButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
-            backButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
-            backButton.setDisable(true);
-
             bottomVBox = new VBox();
             bottomVBox.setAlignment(Pos.CENTER);
             bottomVBox.setSpacing(10);
             bottomVBox.setPadding(new Insets(10, 10, 10, 10));
-            bottomVBox.getChildren().addAll(backButton, exitButton);
+            bottomVBox.getChildren().addAll(exitButton);
 
             mainPane.setBottom(bottomVBox);
         }
@@ -768,9 +768,8 @@ public class Gui {
     }
 
     private void buttonActions() {
-        //TOP BUTTONS
+        //MAIN BUTTONS
         handleExitButton();
-        handleBackButton();
         handleLoginButton();
         handleLogoutButton();
         handleRegisterButton();
@@ -1117,7 +1116,7 @@ public class Gui {
             int index = i;
             center.buys.get(i).setOnMouseClicked(event -> {
 
-                if (controller.addConcertsToCustomer(index+1)) {
+                if (controller.addConcertsToCustomer(concerts.get(index).getId())) {
                     center.buys.get(index).setText("Bought");
                     center.buys.get(index).setDisable(true);
                     System.out.println(index);
@@ -1305,12 +1304,6 @@ public class Gui {
 
     }
 
-    private void handleBackButton() {
-        bottom.backButton.setOnMouseClicked(event -> {
-
-        });
-    }
-
     private void handleExitButton() {
         bottom.exitButton.setOnMouseClicked(event -> {
             System.exit(0);
@@ -1350,7 +1343,7 @@ public class Gui {
             arena.setText(concert.getArena().getName());
             ageLimit.setText(String.valueOf(concert.getAgeLimit()));
             date.setText(String.valueOf(concert.getDate()));
-            price.setText(String.valueOf(concert.getPrice()));
+            price.setText(String.format("%.2f",concert.getPrice()));
 
            /* artist.setText(controller.getConcertDTOS().get(i).getArtist());
             arena.setText(controller.getConcertDTOS().get(i).getArena().getName());
