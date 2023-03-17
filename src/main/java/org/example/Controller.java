@@ -245,7 +245,10 @@ public class Controller {
     public boolean checkAgeLimit(Customer customer, Concert concert) {
         LocalDate now = LocalDate.now();
         long years = ChronoUnit.YEARS.between(customer.getBirthdate(), now);
-        System.out.println(years);
+        System.out.println("Kund ålder: " +years);
+        System.out.println("Gräns: "+ concert.getAgeLimit());
+        System.out.println(concert.getArtist());
+        System.out.println(concert.getAgeLimit() <= years);
 
         return concert.getAgeLimit() <= years;
     }
@@ -253,6 +256,17 @@ public class Controller {
     public void deleteConcert(int index) {
         Concert concert = concertDAO.getAllConcerts().get(index);
         concertDAO.deleteConcert(concert.getId());
+    }
+
+    public boolean deleteArena(Arena arena){
+        concertList = concertDAO.getAllConcerts();
+        for(Concert concert: concertList){
+            if(concert.getArena().getId().equals(arena.getId())){
+                return false;
+            }
+        }
+        arenaDAO.deleteArena(arena.getId());
+        return true;
     }
 
     public void updateConcert(List<String> editConcertInputs) {
