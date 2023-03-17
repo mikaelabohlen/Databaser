@@ -9,8 +9,6 @@ import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
 import org.example.enums.Setting;
-import org.example.gui.guidto.AdressDTO;
-import org.example.gui.guidto.UserDTO;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -255,5 +253,41 @@ public class Controller {
     public void deleteConcert(int index) {
         Concert concert = concertDAO.getAllConcerts().get(index);
         concertDAO.deleteConcert(concert.getId());
+    }
+
+    public void updateConcert(List<String> editConcertInputs) {
+        Concert concert = concertDAO.getConcertByArtist(editConcertInputs.get(0));
+        concert.setArtist(editConcertInputs.get(1));
+        concert.setDate(LocalDate.parse(editConcertInputs.get(2)));
+        concert.setAgeLimit(Integer.valueOf(editConcertInputs.get(3)));
+        concert.setPrice(Double.valueOf(editConcertInputs.get(4)));
+
+        Arena arena = arenaDAO.getArenaByName(editConcertInputs.get(5));
+
+        concert.setArena(arena);
+        concertDAO.updateConcert(concert);
+    }
+
+    public void updateCustomer(List<String> editUserInputs) {
+        Customer customer = customerDAO.getCustomerById(currentCustomer.getId());
+        customer.setFirstName(editUserInputs.get(0));
+        customer.setLastName(editUserInputs.get(1));
+        customer.setBirthdate(LocalDate.parse(editUserInputs.get(2)));
+        customer.setPhoneNumber(editUserInputs.get(3));
+
+        Address address = addressDAO.getAddressById(customer.getAddress().getId());
+        address.setStreetName(editUserInputs.get(4));
+        address.setHouseNumber(Integer.valueOf(editUserInputs.get(5)));
+        address.setZipCode(Integer.valueOf(editUserInputs.get(6)));
+        address.setCity(editUserInputs.get(7));
+
+        addressDAO.updateAddress(address);
+        customer.setAddress(address);
+        customerDAO.updateCustomer(customer);
+        currentCustomer = customer;
+    }
+
+    public void logOut() {
+        currentCustomer = null;
     }
 }

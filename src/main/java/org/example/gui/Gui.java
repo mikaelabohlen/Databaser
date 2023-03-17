@@ -1,5 +1,6 @@
 package org.example.gui;
 
+import com.google.protobuf.StringValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -15,7 +16,10 @@ import org.example.Controller;
 import org.example.entities.Arena;
 import org.example.entities.Concert;
 import org.example.entities.Customer;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -463,8 +467,13 @@ public class Gui {
         }
 
         private void concertsChoiceBoxHandler(ActionEvent actionEvent) {
-            String concertInput = concertChoiceBox.getValue(); //TODO Stringbuilder
+            String[] concertInputStrings = concertChoiceBox.getValue().split("/"); //TODO Stringbuilder
+            String concertInput = concertInputStrings[0]; //TODO Stringbuilder
+            System.out.println(concertInput);
+//            String concertInput = concertChoiceBox.getValue();
             Concert concert = controller.getConcertDAO().getConcertByArtist(concertInput);
+            System.out.println("Artist: "+concert.getArtist());
+//            concertInputStrings = null;
 
             if(updateGridPane !=null) {
                 updateGridPane.getChildren().clear();
@@ -932,6 +941,12 @@ public class Gui {
 
     private void handleUpdateConcertSubmitButton() {
         center.updateSubmitButton.setOnMouseClicked(event-> {
+            List<String> editConcertInputs = new ArrayList<>();
+
+            String[] concertInputStrings = center.concertChoiceBox.getValue().split("/"); //TODO Stringbuilder
+            String concertInput = concertInputStrings[0]; //TODO Stringbuilder
+
+            editConcertInputs.add(concertInput);
 
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText("Are you sure you want to update this concert?");
@@ -944,10 +959,12 @@ public class Gui {
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() == yesButton) {
                 //TODO FIXA KNAPPN
-                center.updateArtistTextField.getText();
-                center.updateDateTextField.getText();
-                center.updateAgelimitTextField.getText();
-                center.updatePriceTextField.getText();
+                editConcertInputs.add(center.updateArtistTextField.getText());
+                editConcertInputs.add(center.updateDateTextField.getText());
+                editConcertInputs.add(center.updateAgelimitTextField.getText());
+                editConcertInputs.add(center.updatePriceTextField.getText());
+                editConcertInputs.add(center.arenasChoiceBox.getValue());
+                controller.updateConcert(editConcertInputs);
             }
         });
     }
@@ -1015,9 +1032,14 @@ public class Gui {
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.get() == yesButton) {
-
-                controller.getArenaDAO().deleteArena(arena.getId());
-                addArenasToChoiceBox();
+                try {
+                    controller.getArenaDAO().deleteArena(arena.getId());
+                    addArenasToChoiceBox();
+                }catch (Exception e){
+                    Alert alert2 = new Alert(Alert.AlertType.WARNING);
+                    alert2.setHeaderText("You must first cancel all concerts on " + arena.getName() + "!");
+                    alert2.showAndWait();
+                }
             }
         });
     }
@@ -1153,13 +1175,18 @@ public class Gui {
 
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() ==  yesButton) {
+                List<String> editUserInputs = new ArrayList<>();
+                editUserInputs.add(center.userFirstnameTextField.getText());
+                editUserInputs.add(center.userLastnameTextField.getText());
+                editUserInputs.add(center.userBirthdateTextField.getText());
+                editUserInputs.add(center.userPhoneTextField.getText());
+                editUserInputs.add(center.userStreetTextField.getText());
+                editUserInputs.add (center.userHouseNumberTextField.getText());
+                editUserInputs.add(center.userZipcodeTextField.getText());
+                editUserInputs.add(center.userCityTextField.getText());
                 //TODO fixa uppdatering för användarinfo
-                center.userFirstnameTextField.getText();
-                center.userLastnameTextField.getText();
-                center.userBirthdateTextField.getText();
-                center.userPhoneTextField.getText();
-                center.userStreetTextField.getText();
-                center.userHouseNumberTextField.getText();
+                controller.updateCustomer(editUserInputs);
+
             }
         });
     }
@@ -1257,6 +1284,7 @@ public class Gui {
             top.startViewGridPane.getChildren().remove(top.logoutButton);
             top.startViewGridPane.add(top.loginButton,0,2,1,1);
             top.navBarHBox.getChildren().clear();
+            controller.logOut();
 
             center.startView();
         });
@@ -1453,8 +1481,8 @@ public class Gui {
         center.concerts = center.concertChoiceBox.getItems();
         for(int i=0; i<concerts.size(); i++) {
             //TODO från todo rad 458 så man kan köra den utkommenterade raden istället för den nedan
-            /*center.concerts.add(concerts.get(i).getArtist() + "/" + concerts.get(i).getDate() + "/" + concerts.get(i).getArena().getName());*/
-            center.concerts.add(concerts.get(i).getArtist());
+            center.concerts.add(concerts.get(i).getArtist() + "/" + concerts.get(i).getDate() + "/" + concerts.get(i).getArena().getName());
+//            center.concerts.add(concerts.get(i).getArtist());
         }
     }
 

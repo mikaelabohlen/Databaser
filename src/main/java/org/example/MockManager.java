@@ -214,7 +214,7 @@ public class MockManager {
         concert2.setDate(LocalDate.of(2023, 7, 30));
         concert2.setPrice(1599.99);
         concert2.setAgeLimit(3);
-        concert2.setArena(controller.getArenaDAO().getArenaById(1));
+        concert2.setArena(controller.getArenaDAO().getArenaById(2));
         controller.getConcertDAO().createConcert(concert2);
 
 
@@ -223,7 +223,7 @@ public class MockManager {
         concert3.setDate(LocalDate.of(2023, 4, 1));
         concert3.setPrice(799.99);
         concert3.setAgeLimit(12);
-        concert3.setArena(controller.getArenaDAO().getArenaById(1));
+        concert3.setArena(controller.getArenaDAO().getArenaById(3));
         controller.getConcertDAO().createConcert(concert3);
 
 
@@ -232,7 +232,7 @@ public class MockManager {
         concert4.setDate(LocalDate.of(2023, 7, 1));
         concert4.setPrice(299.99);
         concert4.setAgeLimit(18);
-        concert4.setArena(controller.getArenaDAO().getArenaById(1));
+        concert4.setArena(controller.getArenaDAO().getArenaById(4));
         controller.getConcertDAO().createConcert(concert4);
 
         Concert concert5 = new Concert();
@@ -240,7 +240,7 @@ public class MockManager {
         concert5.setDate(LocalDate.of(2023, 3, 30));
         concert5.setPrice(199.99);
         concert5.setAgeLimit(18);
-        concert5.setArena(controller.getArenaDAO().getArenaById(1));
+        concert5.setArena(controller.getArenaDAO().getArenaById(5));
         controller.getConcertDAO().createConcert(concert5);
 
         Concert concert6 = new Concert();
@@ -258,7 +258,7 @@ public class MockManager {
         //Denna bör göras klart först när DAON är klar?.
 
         //Mocklink customer1 consert ALL(hittills)=
-        Customer customer1 = controller.getCustomerDAO().getCustomerById(1);
+        Customer customer1 = controller.getCustomerDAO().getCustomerById(2);
         List<Concert> concerts1 = new ArrayList<>();
         concerts1.add(controller.getConcertDAO().getConcertById(2));
         concerts1.add(controller.getConcertDAO().getConcertById(1));
@@ -266,7 +266,7 @@ public class MockManager {
         controller.getCustomerDAO().updateCustomer(customer1);
 
         //Mocklink customer2 Concert 2
-        Customer customer2 = controller.getCustomerDAO().getCustomerById(1);
+        Customer customer2 = controller.getCustomerDAO().getCustomerById(3);
         List<Concert> concerts2 = new ArrayList<>();
         concerts2.add(controller.getConcertDAO().getConcertById(4));
         concerts2.add(controller.getConcertDAO().getConcertById(5));
@@ -275,7 +275,7 @@ public class MockManager {
 
         //Mocklink customer 5 concert 3 and 4
 
-        Customer customer5 = controller.getCustomerDAO().getCustomerById(5);
+        Customer customer5 = controller.getCustomerDAO().getCustomerById(4);
         List<Concert> concerts5 = new ArrayList<>();
         concerts5.add(controller.getConcertDAO().getConcertById(3));
         concerts5.add(controller.getConcertDAO().getConcertById(4));
