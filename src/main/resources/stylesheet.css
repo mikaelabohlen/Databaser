@@ -1,0 +1,58 @@
+.root {
+    -fx-background-image: url("background.jpg");
+    -fx-background-size: stretch;
+}
+
+.label {
+    -fx-font-weight: bold;
+}
+
+.text {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 60px;
+}
+
+.choice-box {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 60px;
+}
+
+.check-box .box {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 60px;
+}
+
+.text-field {
+    -fx-pref-height: 35;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 60px;
+}
+
+#loggedInViewMainVBox {
+    -fx-background-color: lightgrey;
+    -fx-border-radius: 49px;
+    -fx-background-radius: 60px;
+    -fx-border-width: 5px;
+    -fx-border-color: black;
+}
+
+#loggedInAdminViewVBox {
+    -fx-background-color: lightgrey;
+    -fx-border-radius: 49px;
+    -fx-background-radius: 60px;
+    -fx-border-width: 5px;
+    -fx-border-color: black;
+}
+
+#firstPageLabels {
+    -fx-text-fill: white;
+}
+
+

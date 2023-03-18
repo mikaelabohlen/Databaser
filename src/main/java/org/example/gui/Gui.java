@@ -20,10 +20,7 @@ import org.example.entities.Customer;
 import java.math.RoundingMode;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public class Gui {
@@ -47,8 +44,8 @@ public class Gui {
     private CustomerList customerList;
 
     //COMMON GUI CONFIGS
-    private final int STANDARD_BUTTON_WIDTH = 100;
-    private final int STANDARD_BUTTON_HEIGHT = 25;
+    private final int STANDARD_BUTTON_WIDTH = 150;
+    private final int STANDARD_BUTTON_HEIGHT = 35;
 
     public Gui(Stage primaryStage, Controller controller) {
         this.primaryStage = primaryStage;
@@ -77,6 +74,7 @@ public class Gui {
         public void setupTop() {
             //TOP MAIN
             headerLabel = new Label("Wigell Concerts");
+            headerLabel.setId("firstPageLabels");
             headerLabel.setStyle("-fx-font-size: 40");
 
             loginButton = new Button("Login");
@@ -98,7 +96,9 @@ public class Gui {
             registerButton.setMinWidth(STANDARD_BUTTON_WIDTH);
 
             userNameLabel = new Label("Användarnamn:");
+            userNameLabel.setId("firstPageLabels");
             passwordLabel = new Label("Lösenord:");
+            passwordLabel.setId("firstPageLabels");
 
             usernameTextField = new TextField();
 
@@ -234,7 +234,7 @@ public class Gui {
         public void setupCenter() {
 
             //START VIEW
-            startViewLabel = new Label("StartView");
+            startViewLabel = new Label();
 
             //LOGGED IN VIEW
             headerLabel = new Label();
@@ -255,6 +255,7 @@ public class Gui {
             loggedInViewHeaderHBox.getChildren().addAll(headerLabel);
 
             loggedInViewMainVBox = new VBox();
+            loggedInViewMainVBox.setId("loggedInViewMainVBox");
             loggedInViewMainVBox.setAlignment(Pos.TOP_CENTER);
             loggedInViewMainVBox.setSpacing(10);
             loggedInViewMainVBox.setPadding(new Insets(10, 10, 10, 10));
@@ -317,7 +318,7 @@ public class Gui {
 
             userRemoveAccountButton = new Button("Remove Account");
             userRemoveAccountButton.setPrefHeight(STANDARD_BUTTON_HEIGHT);
-            userRemoveAccountButton.setPrefWidth(120);
+            userRemoveAccountButton.setPrefWidth(STANDARD_BUTTON_WIDTH);
 
             userInfoGridPane.add(userFirstnameLabel, 0, 0, 1, 1);
             userInfoGridPane.add(userFirstnameTextField, 1, 0, 1, 1);
@@ -344,6 +345,7 @@ public class Gui {
             loggedInAdminLabel = new Label();
 
             loggedinAdminViewVBox = new VBox();
+            loggedinAdminViewVBox.setId("loggedInAdminViewVBox");
             loggedinAdminViewVBox.setAlignment(Pos.TOP_CENTER);
             loggedinAdminViewVBox.setSpacing(10);
             loggedinAdminViewVBox.setPadding(new Insets(10, 10, 10, 10));
@@ -744,9 +746,10 @@ public class Gui {
 
             //MAIN VIEW
             mainPane = new BorderPane();
-            mainScene = new Scene(mainPane, 600, 800);
-
+            mainScene = new Scene(mainPane, 800, 800);
+            mainScene.getStylesheets().add("stylesheet.css");
             //MAIN GUI SETUP
+
             top.setupTop();
             center.setupCenter();
             bottom.setupBottom();
@@ -958,12 +961,20 @@ public class Gui {
                 editConcertInputs.add(center.updateAgelimitTextField.getText());
                 editConcertInputs.add(center.updatePriceTextField.getText());
                 editConcertInputs.add(center.arenasChoiceBox.getValue());
-                controller.updateConcert(editConcertInputs);
+                try {
+                    controller.updateConcert(editConcertInputs);
+                    Alert alert2 = new Alert(Alert.AlertType.WARNING);
+                    alert2.setHeaderText("The concert is updated!");
+                    alert2.showAndWait();
+                } catch (Exception e) {
+                    Alert alert3 = new Alert(Alert.AlertType.WARNING);
+                    alert3.setHeaderText("Something went wrong");
+                    alert3.showAndWait();
+                }
+
                 addConcertsToChoiceBox();
 
-                Alert alert2 = new Alert(Alert.AlertType.WARNING);
-                alert2.setHeaderText("The concert is updated!");
-                alert2.showAndWait();
+
 
 //                center.updateArtistTextField.clear();
 //                center.updateDateTextField.clear();
@@ -1333,7 +1344,9 @@ public class Gui {
             Concert concert = concerts.get(i);
 
             Label artist = new Label();
+            artist.setId("concertListUser");
             Label arena = new Label();
+            arena.setId("concertListUser");
             Label ageLimit = new Label();
             Label date = new Label();
             Label price = new Label();
